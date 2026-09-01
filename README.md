@@ -1,4 +1,4 @@
-# Frozen consumer-resource model
+# A consumer-resource model implementing cross-feeding and cofactor competition
 
 This folder contains the processed inputs and code needed to refit the
 model and reproduce all predictions and errors. Lag times are the only fitted
