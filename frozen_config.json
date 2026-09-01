@@ -1,0 +1,70 @@
+{
+  "model_name": "final_frozen_lag01_X0p001",
+  "fixed_inputs": {
+    "nongrower_binary_consumption_matrix": "data/nongrower_binary_consumption_matrix.csv",
+    "grower_binary_consumption_matrix": "data/grower_binary_consumption_matrix.csv",
+    "lag_time": "data/fixed_lag01.csv"
+  },
+  "bt_resource_fit": {
+    "floor": 0.001,
+    "reciprocal_abs_log2": 0.8,
+    "reciprocal_abs_difference": 0.2,
+    "minimum_pair_growth": 0.01,
+    "pair_excluded_species": [],
+    "fixed_resource_abundances": {}
+  },
+  "resource_auc": {
+    "initial_abundance": 0.01,
+    "cycles": 10,
+    "hours_per_cycle": 48.0,
+    "dt": 0.01,
+    "dilution": 200.0,
+    "mu_threshold": 0.001
+  },
+  "grower_dm_fit": {
+    "floor": 0.001
+  },
+  "cofactor_fit": {
+    "floor": 0.001,
+    "F0": 0.1,
+    "C0": 0.001,
+    "lambda_F": 0.001,
+    "lambda_C": 0.001,
+    "lambda_ineq": 3.5,
+    "active_margin_log2": 0.25,
+    "F_bounds": [
+      0.00001,
+      1.0
+    ],
+    "C_bounds": [
+      1e-08,
+      0.5
+    ]
+  },
+  "grower_production": {
+    "regularization_weight": 0.3,
+    "clip_min": 0.001,
+    "profile_floor": 1e-12
+  },
+  "simulation": {
+    "cycles": 10,
+    "hours_per_cycle": 48.0,
+    "dt": 0.04,
+    "dilution": 200.0,
+    "initial_abundance": 0.001,
+    "prediction_floor": 0.001,
+    "uptake_resource_sum_threshold": 0.001
+  },
+  "dm_predictions": {
+    "nongrower_uses_universal_shared_niche": true,
+    "additional_nongrower_lag_hours": 4.0
+  },
+  "scoring": {
+    "eu_readout_rule": "When Eu.c and Eu.l are both present, predicted Eu.l is added to predicted Eu.c and predicted Eu.l is set to zero; observed values are unchanged and Eu.l remains scored.",
+    "primary_carbon_sources_excluded": [
+      "blank",
+      "Fructose",
+      "Glucuronic_acid"
+    ]
+  }
+}

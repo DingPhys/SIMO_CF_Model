@@ -1,0 +1,31 @@
+community,community_label,medium,richness,n_growers,n_nongrowers,production_branch,cofactor_enabled,mean_abs_log2_error,rmse_log2_error
+Bt_spent::Ai+Mi (Bt),Ai+Mi (Bt),Bt_spent,2,1,1,prod_prior-0p3,True,2.890916715172291,2.893879595595868
+Bt_spent::Va+Vp (Bt),Va+Vp (Bt),Bt_spent,2,0,2,prod_prior-0p3,True,4.567588100118927,6.021630927688324
+Bt_spent::Eu.c+ Eu.l (Bt),Eu.c+ Eu.l (Bt),Bt_spent,2,0,2,prod_prior-0p3,True,5.159644244512765,6.5114853358124645
+Bt_spent::Csp+Cs (Bt),Csp+Cs (Bt),Bt_spent,2,1,1,prod_prior-0p3,True,3.4044880691159243,3.7119603244464536
+Bt_spent::G1+G2 (Bt),G1+G2 (Bt),Bt_spent,4,1,3,prod_prior-0p3,True,3.6425014715019053,4.271092374407721
+Bt_spent::Eu.c+ Eu.l+ Csp+Cs + Dl (Bt),Eu.c+ Eu.l+ Csp+Cs + Dl (Bt),Bt_spent,5,2,3,prod_prior-0p3,True,2.9456242816163685,4.312125759516042
+Bt_spent::G1+G3 (Bt),G1+G3 (Bt),Bt_spent,7,3,4,prod_prior-0p3,True,5.015816403297781,5.4449912404394
+Bt_spent::G2+G3 (Bt),G2+G3 (Bt),Bt_spent,7,2,5,prod_prior-0p3,True,3.78231559845829,4.43603992656609
+Bt_spent::G1+G2+G3 (Bt),G1+G2+G3 (Bt),Bt_spent,9,3,6,prod_prior-0p3,True,3.972378324977071,4.851170807217113
+Bt_spent::G1+G2+G3+Im (Bt),G1+G2+G3+Im (Bt),Bt_spent,10,3,7,prod_prior-0p3,True,3.996961504278495,4.746031026546146
+Bt_spent::G1+G2+G3+Im+Mf (Bt),G1+G2+G3+Im+Mf (Bt),Bt_spent,11,4,7,prod_prior-0p3,True,3.973024575951219,4.773740547131127
+Bd_spent::Ai+Mi (Bd),Ai+Mi (Bd),Bd_spent,2,1,1,prod_prior-0p3,True,1.9746441253699527,2.017035734115453
+Bd_spent::Va+Vp (Bd),Va+Vp (Bd),Bd_spent,2,0,2,prod_prior-0p3,True,2.8779307008984363,4.016680508171664
+Bd_spent::G1+G2 (Bd),G1+G2 (Bd),Bd_spent,4,1,3,prod_prior-0p3,True,4.002192510558691,5.393810270752536
+Bd_spent::G1+G3 (Bd),G1+G3 (Bd),Bd_spent,7,3,4,prod_prior-0p3,True,3.6690821442905373,4.934043918351448
+Bd_spent::G2+G3 (Bd),G2+G3 (Bd),Bd_spent,7,2,5,prod_prior-0p3,True,2.7141775796952254,3.5718107522775804
+Bd_spent::G1+G2+G3 (Bd),G1+G2+G3 (Bd),Bd_spent,9,3,6,prod_prior-0p3,True,3.309599087306543,4.650027979428974
+Bd_spent::G1+G2+G3+Im (Bd),G1+G2+G3+Im (Bd),Bd_spent,10,3,7,prod_prior-0p3,True,3.3626203474995853,4.553138922615729
+Bd_spent::G1+G2+G3+Im+Mf (Bd),G1+G2+G3+Im+Mf (Bd),Bd_spent,11,4,7,prod_prior-0p3,True,3.7501853436285084,4.838084938165469
+Bt_Bd_spent::Ai+Mi (Bt+Bd),Ai+Mi (Bt+Bd),Bt_Bd_spent,2,1,1,prod_prior-0p3,True,4.662166765669958,5.05719212825126
+Bt_Bd_spent::Va+Vp (Bt+Bd),Va+Vp (Bt+Bd),Bt_Bd_spent,2,0,2,prod_prior-0p3,True,5.184175685135012,6.528997861295594
+Bt_Bd_spent::Eu.c+ Eu.l (Bt+Bd),Eu.c+ Eu.l (Bt+Bd),Bt_Bd_spent,2,0,2,prod_prior-0p3,True,5.381062436909984,6.662579697287214
+Bt_Bd_spent::Csp+Cs (Bt+Bd),Csp+Cs (Bt+Bd),Bt_Bd_spent,2,1,1,prod_prior-0p3,True,2.868592842607021,3.1360413209656013
+Bt_Bd_spent::G1+G2 (Bt+Bd),G1+G2 (Bt+Bd),Bt_Bd_spent,4,1,3,prod_prior-0p3,True,3.802018743191181,4.8533982913910885
+Bt_Bd_spent::Eu.c+ Eu.l+ Csp+Cs + Dl (Bt+Bd),Eu.c+ Eu.l+ Csp+Cs + Dl (Bt+Bd),Bt_Bd_spent,5,2,3,prod_prior-0p3,True,3.9044895592718376,4.844814925734421
+Bt_Bd_spent::G1+G3 (Bt+Bd),G1+G3 (Bt+Bd),Bt_Bd_spent,7,3,4,prod_prior-0p3,True,4.762393094711654,5.328410454566023
+Bt_Bd_spent::G2+G3 (Bt+Bd),G2+G3 (Bt+Bd),Bt_Bd_spent,7,2,5,prod_prior-0p3,True,3.4364672814709807,4.648522856538709
+Bt_Bd_spent::G1+G2+G3 (Bt+Bd),G1+G2+G3 (Bt+Bd),Bt_Bd_spent,9,3,6,prod_prior-0p3,True,3.795346297540922,5.1367002111266755
+Bt_Bd_spent::G1+G2+G3+Im (Bt+Bd),G1+G2+G3+Im (Bt+Bd),Bt_Bd_spent,10,3,7,prod_prior-0p3,True,3.7087920998546635,4.985127990139402
+Bt_Bd_spent::G1+G2+G3+Im+Mf (Bt+Bd),G1+G2+G3+Im+Mf (Bt+Bd),Bt_Bd_spent,11,4,7,prod_prior-0p3,True,3.8228999408854274,4.906066082237938

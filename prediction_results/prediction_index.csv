@@ -1,0 +1,7 @@
+prediction_family,output_directory,summary_rows
+bt,nongrower_assemblies_in_bt_spent,2
+carbon,full_communities_across_carbon_sources,2
+pairwise,grower_nongrower_pairwise_in_dm,1
+grower_pairwise,grower_grower_pairwise_in_dm,116
+dm,random_core_full_assemblies_in_dm,2
+spent,assemblies_in_bt_bd_btbd_spent,2
