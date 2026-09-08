@@ -1,0 +1,5 @@
+"panel","community","reference_community","reference_species","observed","predicted","observed_plot","predicted_plot","diameter_multiplier","marker"
+7,"Va_dropout","Full_community","Eu.c",0.0057337689854427,0.00494592166581943,0.0057337689854427,0.00494592166581943,0.7,"black outline, transparent fill"
+8,"Cs_dropout","Full_community","Eu.c",0.0057337689854427,0.00494592166581943,0.0057337689854427,0.00494592166581943,0.7,"black outline, transparent fill"
+9,"Mi_dropout","Full_community","Eu.c",0.0057337689854427,0.00494592166581943,0.0057337689854427,0.00494592166581943,0.7,"black outline, transparent fill"
+10,"Full_community","Full_community","Eu.c",0.0057337689854427,0.00494592166581943,0.0057337689854427,0.00494592166581943,0.7,"black outline, transparent fill"

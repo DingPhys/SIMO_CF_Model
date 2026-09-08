@@ -2,3 +2,6 @@
 __pycache__/
 *.py[cod]
 .Rhistory
+/data_backup/
+/figure_plots/Figures0908/
+*.[aA][iI]

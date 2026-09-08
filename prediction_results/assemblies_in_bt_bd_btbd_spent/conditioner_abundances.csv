@@ -1,5 +1,0 @@
-medium,conditioner,abundance,source,source_detail
-Bt_spent,Bt,0.6916666666666668,data/Canonical_16_grower_dm68_mean_growth.csv,mean_growth
-Bd_spent,Bd,0.6168333333333333,data/Canonical_16_grower_dm68_mean_growth.csv,mean_growth
-Bt_Bd_spent,Bt,0.344120825,legacy_spent_prediction_notebook,Preserved data-derived constant from Assemblies_in_Bt_Bd_BtBd_spent.ipynb; the exact upstream absolute-abundance reconstruction is not recorded.
-Bt_Bd_spent,Bd,0.319379175,legacy_spent_prediction_notebook,Preserved data-derived constant from Assemblies_in_Bt_Bd_BtBd_spent.ipynb; the exact upstream absolute-abundance reconstruction is not recorded.

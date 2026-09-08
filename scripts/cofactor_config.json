@@ -1,0 +1,19 @@
+{
+  "cofactor_fit": {
+    "floor": 0.001,
+    "F0": 0.1,
+    "C0": 0.001,
+    "lambda_F": 0.001,
+    "lambda_C": 0.001,
+    "lambda_ineq": 3.5,
+    "active_margin_log2": 0.25,
+    "F_bounds": [
+      0.00001,
+      1.0
+    ],
+    "C_bounds": [
+      1e-08,
+      0.5
+    ]
+  }
+}

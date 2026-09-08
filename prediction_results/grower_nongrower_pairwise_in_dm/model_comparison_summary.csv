@@ -1,2 +1,0 @@
-rank,scenario,universal_shared,additional_nongrower_lag_h,production_branch,n_pairs,mean_abs_log2_error,rmse_log2_error,grower_mean_abs_log2_error,nongrower_mean_abs_log2_error,median_pair_mean_abs_log2_error
-1,universal_on__extra_lag-4h__prod_prior-0p3,True,4.0,prod_prior-0p3,248,1.9873970237048668,3.565026276299792,0.4594251836181583,3.515368863791575,1.3661937644825153

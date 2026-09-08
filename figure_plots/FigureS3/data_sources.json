@@ -1,0 +1,22 @@
+{
+  "manual_lag_source": "Finalized_Frozen_Model_GitHub0907/parameters/final_parameters/cofactor_and_lag.csv",
+  "bt_monoculture_lag_source": "Finalized_Frozen_Model_GitHub0907/data/Non-growers_In_Bt_Spent_growth_curve_fit_summary.csv",
+  "double_spent_lag_source": "Zhenyus_data/Data_to_upload/Data/Figure4/Figure4A/double_spent_lag.csv",
+  "double_spent_selection": "new",
+  "species_order_and_colors": "Reference FigureS3; Lsp50 column label normalized to Lsp.",
+  "lag_units": "hours",
+  "heatmap_limits": [
+    0,
+    20
+  ],
+  "heatmap_missing_values": "Grey; preserved from selected source, not replaced by zero.",
+  "missing_mask": "1 = missing; no additional exclusion is inferred.",
+  "new_fitting_performed": false,
+  "source_sha256": {
+    "Finalized_Frozen_Model_GitHub0907/parameters/final_parameters/cofactor_and_lag.csv": "117f6a287aeed1d5d35c3d5279f7e56d5d44f896f52d05cded607202a07f19e8",
+    "Finalized_Frozen_Model_GitHub0907/data/Non-growers_In_Bt_Spent_growth_curve_fit_summary.csv": "01590a5ed13c57c682dc136621787b5a617255eac22b19eae813e46516b6f981",
+    "Zhenyus_data/Data_to_upload/Data/Figure4/Figure4A/double_spent_lag.csv": "3e7ca764d2e931d1d7efe0715a426245e2112862ddbe2cd8f955bfb308b665f3",
+    "Finalized_Frozen_Model_GitHub0907/figure_plots/figures/FigureS3/actual_lag_time_heatmap_source_data.csv": "2f6d06fe1e30830d3e6b8906448643c04f8c45125756c8a7c1956a281cbf5e7d",
+    "Finalized_Frozen_Model_GitHub0907/figure_plots/figures/FigureS3/manual_vs_bt_monoculture_lag_scatter_source_data.csv": "a5879cad374a37526b10ae0a7b66811b8cbbdf75e6255c228ed211506a7aab08"
+  }
+}

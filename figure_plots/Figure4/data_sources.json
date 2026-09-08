@@ -1,0 +1,38 @@
+{
+  "model_root": "/Users/ding/Desktop/Research_Projects/Ecological_Models/Modeling_with_AI/Finalized_Frozen_Model_GitHub0907",
+  "rendering": "Embedded R code adapted from figure_plots/figures/Figure4/generate_figure4.R",
+  "input_sha256": {
+    "parameters/bt_base/bt_resource_Y0.csv": "db66220eaaccdceee185f4c9cb05dd8ea0b1ec4efd579df808c62ba9225794eb",
+    "parameters/bt_base/monoculture_AUC.csv": "6f3e45aefd5a9c1aebe1d019f9458ecc87fcd13cae38ad04982f863b350cc183",
+    "parameters/bt_base/nongrower_R.csv": "0a0f54e3e964a4b63287f85fc57c6fcffc3c9be241658c1e97189dc120abfc50",
+    "parameters/cofactor_fit/cofactor_parameters.csv": "950b8ee55ba81a7e7fe7a20c9e06caf8063357a3e6960cc19bcdd8194f433d44",
+    "parameters/final_parameters/cofactor_and_lag.csv": "46d6c42bc15efca52a1a59dd79b7e72159d7f397047c53cf891a7be066c78d3c",
+    "parameters/grower/model/dm_resource_y0.csv": "71fb1d126df83cd614d0ec1e4ca9f7bfccd853947f2640973f751f1ed57eabb6",
+    "parameters/grower/model/grower_R.csv": "cdc68c456c1aac6f662230d09c4b7e1db52210594d460b98296ca287bd96570c",
+    "parameters/production_fits/prod_prior-0p3/production_profiles.csv": "b74572413ca21a56a198672eaa504d78ae4b1aec0963ef3dfb8d04c4f3f4d5c6",
+    "data/16_grower_dm68_curve_fit.csv": "b2a68c6620a7542e03f4fce06f2d36be4ed110c5934cde1c2637fa42598a7219",
+    "data/16_grower_dm68_mean_growth.csv": "972d38cd0c18f10d3c00e1ceeab93002ef4dc3de70c6bbfed2648065053e9126",
+    "data/Non-growers_In_Bt_Spent_growth_curve_fit_summary.csv": "f1e34f9296ed98ae6964ed374d702f9784c32841f5e4064e2fbe5ce3a95e2a2b",
+    "data/Nongrowers_in_Bt_double_spent.csv": "9846cc27ef19e4e593a3887960eced21509428d2bbad2a326624015767baf70e",
+    "data/Nongrowers_monoculture_in_grower_spent.csv": "cf643a0edd3befb5f000ba23fe94cfda4fb7390c71151ff5c83779f23a7fd3b4",
+    "data/dm_assemblies_mean_relative_abundance_matrix.csv": "176b28e01813f9e6d0e58051d5ad3e98d2876931f0f11720f4a576b6ee5ee66f",
+    "data/fixed_lag01.csv": "4182f3e20335664aa000cd6f83156ed71d3cab8d56ab8765f54b296ba2853931",
+    "data/full_community_different_carbon_sources_absolute_abundance.csv": "3b82001793ae79f076ea790d1b5adaa0485b691818df310b72bc99c34138f7e9",
+    "data/grower_binary_consumption_matrix.csv": "c5f92a5bfc44462d21ae7938db1c30c5a2c7cbfa029ea6f069817093b1092dde",
+    "data/grower_spent_mean_growth.csv": "19df3b20e3194104d2a56fb89600b72150fdc440bcf7bd773341bd76589f7a6b",
+    "data/non-growers_in_Bt_spent_assemblies_mean_relative_abundance.csv": "1c4c9d59928b657da2745a4977fd3f3aab7afd76ba240cb2c613c675986374bb",
+    "data/nongrower_binary_consumption_matrix.csv": "652fa02f372f264671fbad43c5ff4100e3cfdc1d7cce6586590c8858fc373240",
+    "scripts/prediction_pipeline.py": "c8560b219eaf6eaecb7d4b3c40091ea80fc07353eebd3b0b547d6e247524e6cf"
+  },
+  "ld_condition_order_source": "data/non-growers_in_Bt_spent_assemblies_mean_relative_abundance.csv",
+  "notes": [
+    "Predictions freshly simulated; existing prediction_results are not used or modified.",
+    "Double-spent predictions use binary access and current resource amounts, capped by C_donor/F_focal.",
+    "Double-spent self-conditioning diagonal excluded; Full Bt monocultures included.",
+    "Spearman rho uses plotted yields floored at 0.001; raw-yield rho is also exported.",
+    "Ld panel includes double-spent yield and community relative abundance; only communities with >2 species have black outlines.",
+    "Ld floor-level displacement is display-only, with original values retained in the source CSV.",
+    "The twelve reference grid conditions are retained without imposing a target prediction error.",
+    "Error groups use current pipeline QC, Eu.c/Eu.l scoring convention, and observed coexistence >0.001 for pairs."
+  ]
+}

@@ -1,0 +1,81 @@
+"pair_id","data_group","experiment_type","condition","metric","quantity","method","actual","prediction","actual_plot_raw","prediction_plot_raw","actual_plot","prediction_plot","display_adjusted"
+1,"double_spent","Double-spent media","Ld_in_Col_double_spent","yield","Yield","Resource competition",0.0079999999999999,0.113500014275422,0.0079999999999999,0.113500014275422,0.0079999999999999,0.113500014275422,FALSE
+2,"double_spent","Double-spent media","Ld_in_Cs_double_spent","yield","Yield","Resource competition",0.0035,0.113500014275422,0.0035,0.113500014275422,0.0035,0.113500014275422,FALSE
+3,"double_spent","Double-spent media","Ld_in_Et_double_spent","yield","Yield","Resource competition",0.015,0.113500014275422,0.015,0.113500014275422,0.015,0.113500014275422,FALSE
+4,"double_spent","Double-spent media","Ld_in_Eu.c_double_spent","yield","Yield","Resource competition",0.0046666666666666,0.113500014275422,0.0046666666666666,0.113500014275422,0.0046666666666666,0.113500014275422,FALSE
+5,"double_spent","Double-spent media","Ld_in_Eu.l_double_spent","yield","Yield","Resource competition",0.0015,0.113500014275422,0.0015,0.113500014275422,0.0015,0.113500014275422,FALSE
+6,"double_spent","Double-spent media","Ld_in_Im_double_spent","yield","Yield","Resource competition",0.0075,0.113500014275422,0.0075,0.113500014275422,0.0075,0.113500014275422,FALSE
+7,"double_spent","Double-spent media","Ld_in_Lsp_double_spent","yield","Yield","Resource competition",0.0056666666666666,0.113500014275422,0.0056666666666666,0.113500014275422,0.0056666666666666,0.113500014275422,FALSE
+8,"double_spent","Double-spent media","Ld_in_Mi_double_spent","yield","Yield","Resource competition",0.0156666666666666,0.113500014275422,0.0156666666666666,0.113500014275422,0.0156666666666666,0.113500014275422,FALSE
+9,"double_spent","Double-spent media","Ld_in_Va_double_spent","yield","Yield","Resource competition",0.1055,0.113500014275422,0.1055,0.113500014275422,0.1055,0.113500014275422,FALSE
+10,"pair","Pairwise community","Af_Ld","relative_abundance","Relative abundance","Resource competition",1,1,1,1,1,1,FALSE
+11,"pair","Pairwise community","As_Ld","relative_abundance","Relative abundance","Resource competition",1,1,1,1,1,1,FALSE
+12,"pair","Pairwise community","Bl.s_Ld","relative_abundance","Relative abundance","Resource competition",1,1,1,1,1,1,FALSE
+13,"pair","Pairwise community","Col_Ld","relative_abundance","Relative abundance","Resource competition",0.359886849322466,0.696207824000889,0.359886849322466,0.696207824000889,0.359886849322466,0.696207824000889,FALSE
+14,"pair","Pairwise community","Cs_Ld","relative_abundance","Relative abundance","Resource competition",0.0001261988894497,0.765925393119794,0.001,0.765925393119794,0.001,0.765925393119794,FALSE
+15,"pair","Pairwise community","Et_Ld","relative_abundance","Relative abundance","Resource competition",0.0993699036323202,0.995272376954979,0.0993699036323202,0.995272376954979,0.0993699036323202,0.995272376954979,FALSE
+16,"pair","Pairwise community","Eu.c_Ld","relative_abundance","Relative abundance","Resource competition",0.0106329379087661,0.214705130321657,0.0106329379087661,0.214705130321657,0.0106329379087661,0.214705130321657,FALSE
+17,"pair","Pairwise community","Eu.l_Ld","relative_abundance","Relative abundance","Resource competition",0.161658287771146,0.194175355690172,0.161658287771146,0.194175355690172,0.161658287771146,0.194175355690172,FALSE
+18,"pair","Pairwise community","Im_Ld","relative_abundance","Relative abundance","Resource competition",0.982658959537572,0.907118721146664,0.982658959537572,0.907118721146664,0.982658959537572,0.907118721146664,FALSE
+19,"pair","Pairwise community","Ld_Lsp","relative_abundance","Relative abundance","Resource competition",0.113581355250856,0.482867129234624,0.113581355250856,0.482867129234624,0.113581355250856,0.482867129234624,FALSE
+20,"pair","Pairwise community","Ld_Mi","relative_abundance","Relative abundance","Resource competition",0.0190700422278888,0.156966106620436,0.0190700422278888,0.156966106620436,0.0190700422278888,0.156966106620436,FALSE
+21,"pair","Pairwise community","Ld_Pc","relative_abundance","Relative abundance","Resource competition",1,1,1,1,1,1,FALSE
+22,"pair","Pairwise community","Ld_Va","relative_abundance","Relative abundance","Resource competition",0.0092315452671558,0.437486761924655,0.0092315452671558,0.437486761924655,0.0092315452671558,0.437486761924655,FALSE
+23,"larger","Larger community","Eu.c_Im_Ld","relative_abundance","Relative abundance","Resource competition",0,0.210086589264222,0.001,0.210086589264222,0.001,0.210086589264222,FALSE
+24,"larger","Larger community","As_Cs_Eu.c_Ld_Mi","relative_abundance","Relative abundance","Resource competition",0.0005828185103158,0.149745306855198,0.001,0.149745306855198,0.00109544511501033,0.155007681388153,TRUE
+25,"larger","Larger community","Af_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102534479739132,0.001,0.102534479739132,0.00101146026873054,0.0973576163097805,TRUE
+26,"larger","Larger community","Ao_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102534479739132,0.001,0.102534479739132,0.00115967090803163,0.108923084723126,TRUE
+27,"larger","Larger community","As_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102534479739132,0.001,0.102534479739132,0.001,0.101652937273932,TRUE
+28,"larger","Larger community","Bl.s_dropout","relative_abundance","Relative abundance","Resource competition",3.33133453261377e-05,0.102534479739132,0.001,0.102534479739132,0.00103477632463578,0.107986616084789,TRUE
+29,"larger","Larger community","Col_dropout","relative_abundance","Relative abundance","Resource competition",0,0.107336859517892,0.001,0.107336859517892,0.00113354066995061,0.107336859517892,TRUE
+30,"larger","Larger community","Cs_dropout","relative_abundance","Relative abundance","Resource competition",0,0.10585139481137,0.001,0.10585139481137,0.00104663513939211,0.10314462116951,TRUE
+31,"larger","Larger community","Et_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102584443178651,0.001,0.102584443178651,0.00108303326277482,0.0965676150045562,TRUE
+32,"larger","Larger community","Eu.c_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102729512017285,0.001,0.102729512017285,0.0012,0.107261835664167,TRUE
+33,"larger","Larger community","Eu.l_dropout","relative_abundance","Relative abundance","Resource competition",0,0.109568383936732,0.001,0.109568383936732,0.00110799921040791,0.117404638631894,TRUE
+34,"larger","Larger community","Im_dropout","relative_abundance","Relative abundance","Resource competition",8.22104138173285e-05,0.103622376128275,0.001,0.103622376128275,0.00114653135064524,0.105427412242558,TRUE
+35,"larger","Larger community","Lsp_dropout","relative_abundance","Relative abundance","Resource competition",0,0.11518277421832,0.001,0.11518277421832,0.00102305187522046,0.110315753175181,TRUE
+36,"larger","Larger community","Mi_dropout","relative_abundance","Relative abundance","Resource competition",0,0.112730520219069,0.001,0.112730520219069,0.00107076204202672,0.105206242825528,TRUE
+37,"larger","Larger community","Pc_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102534479739132,0.001,0.102534479739132,0.00105862985935237,0.0990535242787514,TRUE
+38,"larger","Larger community","Va_dropout","relative_abundance","Relative abundance","Resource competition",0,0.115128770122162,0.001,0.115128770122162,0.00118640349710037,0.113157635827551,TRUE
+39,"larger","Larger community","Vp_dropout","relative_abundance","Relative abundance","Resource competition",0,0.102534479739132,0.001,0.102534479739132,0.00117296104827666,0.105225241739058,TRUE
+40,"larger","Larger community","Full_community","relative_abundance","Relative abundance","Resource competition",3.28316654847267e-05,0.102534479739132,0.001,0.102534479739132,0.00112069717911242,0.103423667011641,TRUE
+1,"double_spent","Double-spent media","Ld_in_Col_double_spent","yield","Yield","+ Cofactor competition",0.0079999999999999,0.00735246854370017,0.0079999999999999,0.00735246854370017,0.0079999999999999,0.00735246854370017,FALSE
+2,"double_spent","Double-spent media","Ld_in_Cs_double_spent","yield","Yield","+ Cofactor competition",0.0035,0.00495634943167163,0.0035,0.00495634943167163,0.0035,0.00495634943167163,FALSE
+3,"double_spent","Double-spent media","Ld_in_Et_double_spent","yield","Yield","+ Cofactor competition",0.015,0.00948878146407627,0.015,0.00948878146407627,0.015,0.00948878146407627,FALSE
+4,"double_spent","Double-spent media","Ld_in_Eu.c_double_spent","yield","Yield","+ Cofactor competition",0.0046666666666666,0.00362357673793623,0.0046666666666666,0.00362357673793623,0.0046666666666666,0.00362357673793623,FALSE
+5,"double_spent","Double-spent media","Ld_in_Eu.l_double_spent","yield","Yield","+ Cofactor competition",0.0015,0.00299261457591815,0.0015,0.00299261457591815,0.0015,0.00299261457591815,FALSE
+6,"double_spent","Double-spent media","Ld_in_Im_double_spent","yield","Yield","+ Cofactor competition",0.0075,0.00853670095177945,0.0075,0.00853670095177945,0.0075,0.00853670095177945,FALSE
+7,"double_spent","Double-spent media","Ld_in_Lsp_double_spent","yield","Yield","+ Cofactor competition",0.0056666666666666,0.0120670606657325,0.0056666666666666,0.0120670606657325,0.0056666666666666,0.0120670606657325,FALSE
+8,"double_spent","Double-spent media","Ld_in_Mi_double_spent","yield","Yield","+ Cofactor competition",0.0156666666666666,0.00555086280523283,0.0156666666666666,0.00555086280523283,0.0156666666666666,0.00555086280523283,FALSE
+9,"double_spent","Double-spent media","Ld_in_Va_double_spent","yield","Yield","+ Cofactor competition",0.1055,0.113116149217677,0.1055,0.113116149217677,0.1055,0.113116149217677,FALSE
+10,"pair","Pairwise community","Af_Ld","relative_abundance","Relative abundance","+ Cofactor competition",1,1,1,1,1,1,FALSE
+11,"pair","Pairwise community","As_Ld","relative_abundance","Relative abundance","+ Cofactor competition",1,1,1,1,1,1,FALSE
+12,"pair","Pairwise community","Bl.s_Ld","relative_abundance","Relative abundance","+ Cofactor competition",1,1,1,1,1,1,FALSE
+13,"pair","Pairwise community","Col_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.359886849322466,0.696238775374605,0.359886849322466,0.696238775374605,0.359886849322466,0.696238775374605,FALSE
+14,"pair","Pairwise community","Cs_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.0001261988894497,0.765927896679938,0.001,0.765927896679938,0.001,0.765927896679938,FALSE
+15,"pair","Pairwise community","Et_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.0993699036323202,0.995325416976303,0.0993699036323202,0.995325416976303,0.0993699036323202,0.995325416976303,FALSE
+16,"pair","Pairwise community","Eu.c_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.0106329379087661,0.214705097936912,0.0106329379087661,0.214705097936912,0.0106329379087661,0.214705097936912,FALSE
+17,"pair","Pairwise community","Eu.l_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.161658287771146,0.194175250937244,0.161658287771146,0.194175250937244,0.161658287771146,0.194175250937244,FALSE
+18,"pair","Pairwise community","Im_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0.982658959537572,0.90713175101863,0.982658959537572,0.90713175101863,0.982658959537572,0.90713175101863,FALSE
+19,"pair","Pairwise community","Ld_Lsp","relative_abundance","Relative abundance","+ Cofactor competition",0.113581355250856,0.482869320680459,0.113581355250856,0.482869320680459,0.113581355250856,0.482869320680459,FALSE
+20,"pair","Pairwise community","Ld_Mi","relative_abundance","Relative abundance","+ Cofactor competition",0.0190700422278888,0.156965966643649,0.0190700422278888,0.156965966643649,0.0190700422278888,0.156965966643649,FALSE
+21,"pair","Pairwise community","Ld_Pc","relative_abundance","Relative abundance","+ Cofactor competition",1,1,1,1,1,1,FALSE
+22,"pair","Pairwise community","Ld_Va","relative_abundance","Relative abundance","+ Cofactor competition",0.0092315452671558,0.437486481623268,0.0092315452671558,0.437486481623268,0.0092315452671558,0.437486481623268,FALSE
+23,"larger","Larger community","Eu.c_Im_Ld","relative_abundance","Relative abundance","+ Cofactor competition",0,0.210087257139388,0.001,0.210087257139388,0.001,0.210087257139388,FALSE
+24,"larger","Larger community","As_Cs_Eu.c_Ld_Mi","relative_abundance","Relative abundance","+ Cofactor competition",0.0005828185103158,0.149744755150646,0.001,0.149744755150646,0.00109544511501033,0.139749936766132,TRUE
+25,"larger","Larger community","Af_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63066639471407e-17,0.001,0.001,0.00101146026873054,0.00103819186552583,TRUE
+26,"larger","Larger community","Ao_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63066639471407e-17,0.001,0.001,0.00115967090803163,0.00107784234964399,TRUE
+27,"larger","Larger community","As_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63066639471407e-17,0.001,0.001,0.001,0.00109823190005603,TRUE
+28,"larger","Larger community","Bl.s_dropout","relative_abundance","Relative abundance","+ Cofactor competition",3.33133453261377e-05,4.63066639471407e-17,0.001,0.001,0.00103477632463578,0.00101891700620111,TRUE
+29,"larger","Larger community","Col_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,1.58370172100486e-16,0.001,0.001,0.00113354066995061,0.001,TRUE
+30,"larger","Larger community","Cs_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.88191865622408e-13,0.001,0.001,0.00104663513939211,0.00116174413068609,TRUE
+31,"larger","Larger community","Et_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,5.25420661593391e-17,0.001,0.001,0.00108303326277482,0.00120611330630067,TRUE
+32,"larger","Larger community","Eu.c_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.65939555205548e-17,0.001,0.001,0.0012,0.00127586446402232,TRUE
+33,"larger","Larger community","Eu.l_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.64765780262252e-17,0.001,0.001,0.00110799921040791,0.00118372085161038,TRUE
+34,"larger","Larger community","Im_dropout","relative_abundance","Relative abundance","+ Cofactor competition",8.22104138173285e-05,1.22542007934344e-15,0.001,0.001,0.00114653135064524,0.00114017542509914,TRUE
+35,"larger","Larger community","Lsp_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63132263181847e-17,0.001,0.001,0.00102305187522046,0.00111900715971964,TRUE
+36,"larger","Larger community","Mi_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,9.37275363210807e-16,0.001,0.001,0.00107076204202672,0.00105783134748392,TRUE
+37,"larger","Larger community","Pc_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63066639471407e-17,0.001,0.001,0.00105862985935237,0.0013,TRUE
+38,"larger","Larger community","Va_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,0.11517361716589,0.001,0.11517361716589,0.00118640349710037,0.123410754247297,TRUE
+39,"larger","Larger community","Vp_dropout","relative_abundance","Relative abundance","+ Cofactor competition",0,4.63066639471407e-17,0.001,0.001,0.00117296104827666,0.00125217702350381,TRUE
+40,"larger","Larger community","Full_community","relative_abundance","Relative abundance","+ Cofactor competition",3.28316654847267e-05,4.63066639471407e-17,0.001,0.001,0.00112069717911242,0.0012289293591952,TRUE

@@ -1,3 +1,0 @@
-production_branch,cofactor_enabled,n_replicates,n_carbon_sources_all,n_carbon_sources_primary,n_scored_species,primary_mean_carbon_source_abs_log2_error,primary_median_carbon_source_abs_log2_error,all_mean_carbon_source_abs_log2_error
-prod_prior-0p3,True,192,32,29,16,1.9097233537563496,1.9314590808809258,2.009909555733276
-prod_prior-0p3,False,192,32,29,16,2.2634247979471,2.268380659387481,2.350189737221335
