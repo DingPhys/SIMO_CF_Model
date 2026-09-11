@@ -1,9 +1,0 @@
-cofactor_enabled,community_subset,n_communities,mean_community_abs_log2_error,dataset,mean_carbon_source_abs_log2_error
-True,all assemblies,129.0,1.2320201894551732,nongrowers in Bt spent,
-True,complex assemblies,29.0,1.294201392588907,nongrowers in Bt spent,
-False,all assemblies,129.0,1.3578173290524445,nongrowers in Bt spent,
-False,complex assemblies,29.0,1.854862000296401,nongrowers in Bt spent,
-True,,,2.754128553790626,DM communities,
-False,,,2.7016295058790907,DM communities,
-True,,,,carbon sources,1.6178070084029443
-False,,,,carbon sources,1.8941175163651414

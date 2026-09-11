@@ -3,12 +3,12 @@
 
 The implementation reuses the frozen production/cofactor equations from
 the local batched dynamics kernel while adding cycle-level endpoint
-extinction and complete trajectory summaries for the requested scan.
+extinction and final endpoint summaries for the requested scan.
 """
 
 from __future__ import annotations
 
-import time
+from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -23,7 +23,6 @@ from dynamics import (
 
 ROOT = Path(__file__).resolve().parent.parent
 FINALIZED_DIR = ROOT
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 
 COFACTOR_SPECIES = (
     "Col",
@@ -362,8 +361,8 @@ def simulate_scan_batch(
     arrays: dict[str, np.ndarray],
     runs: pd.DataFrame,
     config: ScanConfig,
-) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, float]]:
-    """Run every condition and retain one row per run per serial cycle."""
+) -> pd.DataFrame:
+    """Run every condition and return final endpoints and convergence flags."""
 
     config.validate()
     rate_cr = arrays["rate_cr"]
@@ -379,12 +378,7 @@ def simulate_scan_batch(
     if biomass.shape != (n_runs, n_species):
         raise ValueError("Initial biomass does not match the assembled scan batch.")
 
-    records: list[pd.DataFrame] = []
-    residual_history = np.full((config.max_cycles, n_runs), np.nan, dtype=float)
-    step_count = 0
-    rejected_steps = 0
-    smallest_step = config.max_step_h
-    start_wall = time.perf_counter()
+    residual_history = deque(maxlen=config.convergence_consecutive_cycles)
 
     for cycle in range(1, config.max_cycles + 1):
         cycle_start = biomass.copy()
@@ -432,7 +426,6 @@ def simulate_scan_batch(
                 if finite and minimum >= -1e-8:
                     break
                 dt *= 0.5
-                rejected_steps += 1
                 if dt < config.minimum_step_h:
                     raise RuntimeError(
                         "Adaptive integration failed to find a finite nonnegative step."
@@ -442,8 +435,6 @@ def simulate_scan_batch(
                 np.maximum(item, 0.0) for item in proposed
             )
             time_h = min(config.hours_per_cycle, time_h + dt)
-            step_count += 1
-            smallest_step = min(smallest_step, dt)
 
         endpoint = biomass.copy()
         next_start = apply_cycle_transfer(
@@ -459,9 +450,9 @@ def simulate_scan_batch(
             ),
             axis=1,
         )
-        residual_history[cycle - 1] = residual
-        records.append(
-            pd.DataFrame(
+        residual_history.append(residual)
+        if cycle == config.max_cycles:
+            final_cycle = pd.DataFrame(
                 {
                     "run_id": runs["run_id"].to_numpy(dtype=int),
                     "cycle": cycle,
@@ -474,13 +465,10 @@ def simulate_scan_batch(
                     "cycle_map_residual_log10": residual,
                 }
             )
-        )
         biomass = next_start
 
-    cycle_table = pd.concat(records, ignore_index=True)
-    final = cycle_table[cycle_table["cycle"] == config.max_cycles].copy()
-    final = runs.merge(final, on="run_id", how="left", validate="one_to_one")
-    last_n = residual_history[-config.convergence_consecutive_cycles :]
+    final = runs.merge(final_cycle, on="run_id", how="left", validate="one_to_one")
+    last_n = np.asarray(residual_history)
     final["converged_last_n"] = np.all(
         last_n < config.convergence_tolerance_log10, axis=0
     )
@@ -499,13 +487,7 @@ def simulate_scan_batch(
         ["coexistence", "ng_only", "bt_only"],
         default="washout",
     )
-    diagnostics = {
-        "elapsed_seconds": time.perf_counter() - start_wall,
-        "accepted_integration_steps": int(step_count),
-        "rejected_integration_steps": int(rejected_steps),
-        "smallest_accepted_step_h": float(smallest_step),
-    }
-    return cycle_table, final, diagnostics
+    return final
 
 
 def compare_initial_conditions(final: pd.DataFrame, config: ScanConfig) -> pd.DataFrame:

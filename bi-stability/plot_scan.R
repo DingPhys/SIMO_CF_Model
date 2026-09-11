@@ -1,12 +1,14 @@
 #!/usr/bin/env Rscript
-suppressPackageStartupMessages({library(ggplot2);library(grid)})
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(grid)
+})
 arg <- grep('^--file=', commandArgs(FALSE), value=TRUE)
 here <- dirname(normalizePath(sub('^--file=', '', arg)))
 cli <- commandArgs(TRUE)
 output <- if (length(cli)) normalizePath(cli[[1]]) else file.path(here, 'output')
-figdir <- file.path(output,'figures');dir.create(figdir,showWarnings=FALSE)
-preview <- Sys.getenv('BT_SCAN_PREVIEW')
-if(nzchar(preview)) dir.create(preview,recursive=TRUE,showWarnings=FALSE)
+figdir <- file.path(output,'figures')
+dir.create(figdir,showWarnings=FALSE)
 read <- function(p) read.csv(p,check.names=FALSE)
 ratio <- read(file.path(output,'ratio_grid.csv'))
 sp <- c('Col','Cs','Et','Eu.c','Eu.l','Im','Ld','Lsp','Mi','Va','All NG')
@@ -18,9 +20,12 @@ base_theme <- theme_classic(base_family='Arial',base_size=8) + theme(
  axis.line=element_line(linewidth=.18),axis.ticks=element_line(linewidth=.18),
  panel.spacing.x=unit(12,'pt'))
 save_plot <- function(p,stem,w,h){
- svglite::svglite(file.path(figdir,paste0(stem,'.svg')),width=w,height=h);print(p);dev.off()
- cairo_pdf(file.path(figdir,paste0(stem,'.pdf')),width=w,height=h,family='Arial');print(p);dev.off()
- if(nzchar(preview)){ragg::agg_png(file.path(preview,paste0(stem,'.png')),width=w,height=h,units='in',res=160);print(p);dev.off()}
+ svglite::svglite(file.path(figdir,paste0(stem,'.svg')),width=w,height=h)
+ print(p)
+ dev.off()
+ cairo_pdf(file.path(figdir,paste0(stem,'.pdf')),width=w,height=h,family='Arial')
+ print(p)
+ dev.off()
 }
 combined <- do.call(rbind,lapply(c('baseline_20_cycles','final'),function(stage){
  do.call(rbind,lapply(c('pairwise','community'),function(kind){
@@ -37,9 +42,11 @@ combined$species <- factor(combined$species,levels=rev(sp))
 combined$condition <- paste(ifelse(combined$lag_mode=='on','Lag on','Lag off'),
  ifelse(combined$extinction_mode=='hard_extinction','/ endpoint deletion','/ no deletion'))
 combined$stage <- factor(combined$stage,levels=c('After 20 cycles','After extension'))
-breaks <- c(0,26,50,75,99);labels <- c('0','~0.1','1','~10','100')
+breaks <- c(0,26,50,75,99)
+labels <- c('0','~0.1','1','~10','100')
 for(masked in c(FALSE,TRUE)){
- d <- combined;d$display <- pmin(d$max_endpoint_log10_difference,6)
+ d <- combined
+ d$display <- pmin(d$max_endpoint_log10_difference,6)
  if(masked)d$display[!d$both_initial_conditions_converged] <- NA
  p <- ggplot(d,aes(scan_index,species,fill=display))+geom_tile()+
  facet_grid(stage~condition)+scale_fill_gradient(low='white',high='#B2182B',limits=c(0,6),na.value='#D0D0D0',name='Endpoint difference\n(max |log10 fold change|)',guide=guide_colourbar(display='rectangles'))+
@@ -51,11 +58,15 @@ for(masked in c(FALSE,TRUE)){
 }
 # Endpoint outcomes: no hand-added extrapolated zero-growth observations.
 bar_data <- do.call(rbind,lapply(c('baseline_20_cycles','final'),function(stage){
- a<-read(file.path(output,'pairwise',stage,'run_summary.csv'));a<-a[a$species %in% c('Cs','Mi'),]
- b<-read(file.path(output,'community',stage,'run_summary.csv'));b$species<-'All NG'
+ a<-read(file.path(output,'pairwise',stage,'run_summary.csv'))
+ a<-a[a$species %in% c('Cs','Mi'),]
+ b<-read(file.path(output,'community',stage,'run_summary.csv'))
+ b$species<-'All NG'
  cols<-c('species','ratio','lag_mode','initial_condition','extinction_mode','cycle_end_bt','converged_last_n','cycle')
- d<-rbind(a[,cols],b[,cols]);d<-d[d$extinction_mode=='hard_extinction',]
- d$stage<-if(stage=='baseline_20_cycles')'After 20 cycles' else 'After extension';d
+ d<-rbind(a[,cols],b[,cols])
+ d<-d[d$extinction_mode=='hard_extinction',]
+ d$stage<-if(stage=='baseline_20_cycles')'After 20 cycles' else 'After extension'
+ d
 }))
 bar_data$scan_index<-match(round(bar_data$ratio,12),round(ratio$ratio,12))-1
 bar_data$converged_last_n<-tolower(as.character(bar_data$converged_last_n)) %in% c('true','1')

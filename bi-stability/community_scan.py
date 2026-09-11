@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-import time
+from collections import deque
 
 import numpy as np
 import pandas as pd
@@ -218,7 +218,7 @@ def simulate_batch(
     runs: pd.DataFrame,
     config: ScanConfig,
     starting_biomass: np.ndarray | None = None,
-) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, float]]:
+) -> pd.DataFrame:
     """Simulate one ratio's eight lag/initial/extinction conditions."""
     config.validate()
     arrays = assemble_batch_arrays(parameters, runs, config)
@@ -233,12 +233,7 @@ def simulate_batch(
     hard_extinction = runs["hard_extinction"].to_numpy(dtype=bool)
 
     n_runs = len(runs)
-    records: list[pd.DataFrame] = []
-    residual_history = np.full((config.max_cycles, n_runs), np.nan, dtype=float)
-    step_count = 0
-    rejected_steps = 0
-    smallest_step = config.max_step_h
-    start_wall = time.perf_counter()
+    residual_history = deque(maxlen=config.convergence_consecutive_cycles)
 
     for cycle in range(1, config.max_cycles + 1):
         cycle_start = biomass.copy()
@@ -286,7 +281,6 @@ def simulate_batch(
                 if finite and minimum >= -1e-8:
                     break
                 dt *= 0.5
-                rejected_steps += 1
                 if dt < config.minimum_step_h:
                     raise RuntimeError(
                         "Adaptive integration failed to find a finite nonnegative step."
@@ -295,8 +289,6 @@ def simulate_batch(
                 np.maximum(item, 0.0) for item in proposed
             )
             time_h = min(config.hours_per_cycle, time_h + dt)
-            step_count += 1
-            smallest_step = min(smallest_step, dt)
 
         endpoint = biomass.copy()
         next_start = apply_cycle_transfer(
@@ -312,16 +304,13 @@ def simulate_batch(
             ),
             axis=1,
         )
-        residual_history[cycle - 1] = residual
-        records.append(
-            _cycle_frame(runs, cycle, cycle_start, endpoint, next_start, residual)
-        )
+        residual_history.append(residual)
+        if cycle == config.max_cycles:
+            final_cycle = _cycle_frame(runs, cycle, cycle_start, endpoint, next_start, residual)
         biomass = next_start
 
-    cycle_table = pd.concat(records, ignore_index=True)
-    final_cycle = cycle_table[cycle_table["cycle"] == config.max_cycles].copy()
     final = runs.merge(final_cycle, on="run_id", how="left", validate="one_to_one")
-    last_n = residual_history[-config.convergence_consecutive_cycles :]
+    last_n = np.asarray(residual_history)
     final["converged_last_n"] = np.all(
         last_n < config.convergence_tolerance_log10, axis=0
     )
@@ -349,12 +338,6 @@ def simulate_batch(
         ["coexistence", "ng_only", "bt_only"],
         default="washout",
     )
-    diagnostics = {
-        "elapsed_seconds": time.perf_counter() - start_wall,
-        "accepted_integration_steps": int(step_count),
-        "rejected_integration_steps": int(rejected_steps),
-        "smallest_accepted_step_h": float(smallest_step),
-    }
-    return cycle_table, final, diagnostics
+    return final
 
 

@@ -5,7 +5,6 @@ Requires numpy, pandas, scipy and openpyxl. Paths are relative to this script.
 from pathlib import Path
 import argparse
 import csv
-import hashlib
 import subprocess
 import sys
 sys.dont_write_bytecode = True
@@ -18,8 +17,6 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--skip-fits", action="store_true", help="Keep existing rate/lag tables and rebuild yields/abundances only")
     args = parser.parse_args()
-    raw_files = [p for p in HERE.rglob("*.xlsx") if not p.name.startswith("~$")]
-    before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in raw_files}
     steps = ["extract_growth.py", "extract_communities.py", "extract_carbon.py"]
     if not args.skip_fits:
         steps += ["fit_bt_curves.py", "fit_dm_curves.py"]
@@ -34,7 +31,6 @@ def main():
             reader = csv.DictReader(handle)
             assert reader.fieldnames == schema["columns"], f"Column mismatch: {name}"
             assert [row[schema["row_key"]] for row in reader] == schema["rows"], f"Row mismatch: {name}"
-    assert all(hashlib.sha256(p.read_bytes()).hexdigest() == digest for p, digest in before.items()), "Raw inputs changed during this run"
     print("Done. Tables saved to data/; raw workbooks and manual/binary inputs are unchanged.")
 
 

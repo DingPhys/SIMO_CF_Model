@@ -1,5 +1,5 @@
 """Extract growth yields; uses relative paths anchored to this script directory."""
-from extraction_common import G, NG, OUT, growth_matrix, grower_dm
+from extraction_common import G, NG, growth_matrix, grower_dm
 
 if __name__ == "__main__":
     mono = "Growth_data/Non_growers_spent_medium_of_growers.xlsx"

@@ -1,19 +1,5 @@
 {
-  "model_root": "/Users/ding/Desktop/Research_Projects/Ecological_Models/Modeling_with_AI/Finalized_Frozen_Model_GitHub0907",
-  "parameter_sha256": {
-    "parameters/bt_base/nongrower_R.csv": "e8fba5f5e66b5986b6262b6b9efe36a18628228336f7a02d496724ad2b225dd8",
-    "parameters/bt_base/bt_resource_Y0.csv": "80c5b3acebf24c86477daa7897f876d236817d6c0a1732b2980052243831962c",
-    "parameters/grower/model/grower_R.csv": "3f708d879ced94bb3b05b08bf66e664525c2d5da57c49ae2596acd081ebfed31",
-    "parameters/grower/model/dm_resource_y0.csv": "ecf66648c56dc7f68c4670269a0e9ff9bcbde6178ab18bc961eb92d7f259ad79",
-    "parameters/production_fits/prod_prior-0p3/production_profiles.csv": "ca89cf742d9e036c88994390114fd5c7d1044b87c1ef938c8b5c37e09d5c95a5",
-    "parameters/final_parameters/cofactor_and_lag.csv": "117f6a287aeed1d5d35c3d5279f7e56d5d44f896f52d05cded607202a07f19e8"
-  },
-  "simulation_code_sha256": {
-    "dynamics.py": "70ea9619c0d6915ec7534385da6e36fdde1a34fc5aab3336e49802beda8f7707",
-    "pairwise_scan.py": "724d5f48a5746819c870d1b25368b79e58ead79dcd4f88978bbe098709d0cb89",
-    "community_scan.py": "550bfbe87e286d19ba16e6511b4d12360faacf26380e840548f6a26755e77e29",
-    "run_all.py": "fa2962575297fc12f1fbc33e5a93357f1a3a55fc65cd8bd30cad54a37b18a1e0"
-  },
+  "parameter_source": "/Users/ding/Desktop/Research_Projects/Ecological_Models/Modeling_with_AI/Final_Code_0911/parameters",
   "config": {
     "hours_per_cycle": 48.0,
     "max_cycles": 20,
@@ -30,5 +16,10 @@
     "bt_spent_fraction": 0.1
   },
   "extension_cap": 100,
-  "extension_rule": "Continue only runs failing the same five-cycle convergence test, in 20-cycle blocks; retain converged endpoints and their actual stopping cycle."
+  "extension_rule": "Continue unconverged runs in 20-cycle blocks; retain converged endpoints.",
+  "completed_cycles": {
+    "pairwise": 100,
+    "community": 100
+  },
+  "status": "complete"
 }

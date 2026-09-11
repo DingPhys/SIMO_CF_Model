@@ -1,6 +1,9 @@
 #!/usr/bin/env Rscript
 # Plot current scan endpoints; do not rerun simulations or read live parameters.
-suppressPackageStartupMessages({library(ggplot2); library(grid)})
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(grid)
+})
 script_arg <- grep('^--file=', commandArgs(FALSE), value=TRUE)
 here <- dirname(normalizePath(sub('^--file=', '', script_arg)))
 args <- commandArgs(TRUE)
@@ -17,12 +20,17 @@ is_true <- function(x) tolower(as.character(x)) %in% c('true','1')
 paths <- c(file.path(output,'pairwise',stage,'run_summary.csv'),
            file.path(output,'community',stage,'run_summary.csv'),
            file.path(output,'growth_rate_axis_parameters.csv'))
-a <- read(paths[1]); b <- read(paths[2]); coefficients <- read(paths[3])
-a <- a[a$species %in% c(focal_species,'Mi'), ]; b$species <- 'All NG'
+a <- read(paths[1])
+ b <- read(paths[2])
+ coefficients <- read(paths[3])
+a <- a[a$species %in% c(focal_species,'Mi'), ]
+ b$species <- 'All NG'
 cols <- c('run_id','species','ratio','lag_mode','initial_condition',
           'extinction_mode','cycle_end_bt','converged_last_n','cycle')
-a <- a[,cols]; b <- b[,cols]
-a$source_kind <- 'pairwise'; b$source_kind <- 'community'
+a <- a[,cols]
+ b <- b[,cols]
+a$source_kind <- 'pairwise'
+ b$source_kind <- 'community'
 points <- rbind(a,b)
 points <- points[points$lag_mode==lag_mode & points$extinction_mode=='hard_extinction', ]
 points$converged_last_n <- is_true(points$converged_last_n)
@@ -50,9 +58,11 @@ stopifnot(!anyDuplicated(paste(points$x,points$ratio)))
 # Nearest scanned point defines each interval; outer edges stay within actual
 # scan support. Transition edges are display midpoints, not inferred thresholds.
 cells <- do.call(rbind,lapply(split(points,points$x),function(g){
-  g <- g[order(g$initial_growth_rate), ]; y <- g$initial_growth_rate
+  g <- g[order(g$initial_growth_rate), ]
+   y <- g$initial_growth_rate
   mid <- (y[-length(y)]+y[-1])/2
-  g$ymin <- pmax(0,c(y[1],mid)); g$ymax <- pmin(3,c(mid,tail(y,1)))
+  g$ymin <- pmax(0,c(y[1],mid))
+   g$ymax <- pmin(3,c(mid,tail(y,1)))
   g[g$ymax>g$ymin, ]
 }))
 rownames(cells) <- NULL
@@ -105,13 +115,9 @@ p <- ggplot(cells,aes(x=x,fill=outcome)) +
         legend.margin=margin(t=0,r=0,b=2,l=0,unit='pt'),legend.box.margin=margin(0,0,0,0),
         plot.margin=margin(t=12,r=8,b=8,l=5,unit='pt'))
 svglite::svglite(file.path(figdir,paste0(stem,'.svg')),width=6,height=3,system_fonts=list(sans='Arial'))
-print(p); dev.off()
+print(p)
+ dev.off()
 cairo_pdf(file.path(figdir,paste0(stem,'.pdf')),width=6,height=3,family='Arial')
-print(p); dev.off()
-preview <- Sys.getenv('BT_SCAN_PREVIEW')
-if(nzchar(preview)){
-  dir.create(preview,recursive=TRUE,showWarnings=FALSE)
-  ragg::agg_png(file.path(preview,paste0(stem,'.png')),width=6,height=3,units='in',res=200)
-  print(p); dev.off()
-}
+print(p)
+ dev.off()
 cat('Saved:',file.path(figdir,stem),'\n')

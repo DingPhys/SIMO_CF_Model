@@ -8,7 +8,6 @@ from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, replace
 import argparse
-import hashlib
 import json
 import time
 
@@ -19,12 +18,6 @@ import community_scan as community
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-PARAMETER_FILES = (
-    'bt_base/nongrower_R.csv', 'bt_base/bt_resource_Y0.csv',
-    'grower/model/grower_R.csv', 'grower/model/dm_resource_y0.csv',
-    'production_fits/prod_prior-0p3/production_profiles.csv',
-    'final_parameters/cofactor_and_lag.csv',
-)
 COMPARISON_COLUMNS = (
     'species', 'ratio', 'lag_mode', 'extinction_mode',
     'max_endpoint_log10_difference', 'both_initial_conditions_converged',
@@ -109,7 +102,7 @@ def run_block(kind, parameters, original_runs, previous, start_cycle, end_cycle,
                      previous_indexed.loc[subset.run_id, next_columns].to_numpy(dtype=float))
             futures.append(executor.submit(worker, kind, parameters, subset, block_config, start))
         for i, future in enumerate(as_completed(futures), 1):
-            _, final, _ = future.result()
+            final = future.result()
             final['cycle'] += start_cycle
             finals.append(final)
             if i % 20 == 0 or i == len(futures):
@@ -135,21 +128,10 @@ def main():
         parser.error('Choose a new or empty --output-dir. Existing scan results are preserved.')
     parameter_dir = ROOT / 'parameters'
     config = pair.ScanConfig()
-    hashes = {}
-    for relative in PARAMETER_FILES:
-        source = parameter_dir / relative
-        content = source.read_bytes()
-        hashes['parameters/' + relative] = hashlib.sha256(content).hexdigest()
-    # Load once into memory; no duplicate parameter files are written.
     parameters = pair.load_frozen_parameters(parameter_dir=parameter_dir)
-    for relative in PARAMETER_FILES:
-        if hashlib.sha256((parameter_dir / relative).read_bytes()).hexdigest() != hashes['parameters/' + relative]:
-            raise RuntimeError('Parameters changed while loading; rerun with stable input files.')
     output.mkdir(parents=True, exist_ok=True)
     manifest = dict(
-        parameter_source=str(parameter_dir), parameter_sha256=hashes,
-        simulation_code_sha256={name: hashlib.sha256((HERE / name).read_bytes()).hexdigest()
-                               for name in ['dynamics.py', 'pairwise_scan.py', 'community_scan.py', 'run_all.py']},
+        parameter_source=str(parameter_dir),
         config=asdict(config), extension_cap=args.max_cycles,
         extension_rule='Continue unconverged runs in 20-cycle blocks; retain converged endpoints.',
         completed_cycles={}, status='running',

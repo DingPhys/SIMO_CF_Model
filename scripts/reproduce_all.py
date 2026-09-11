@@ -1,4 +1,4 @@
-"""Fit the model, then run DM and carbon-source predictions."""
+"""Fit the model, then run Bt-spent, DM, and carbon-source predictions."""
 
 from fit_model import fit_model
 from run_predictions import main as predict

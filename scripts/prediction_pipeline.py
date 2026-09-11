@@ -1,7 +1,6 @@
 """Minimal predictions for Bt-spent, DM, and carbon-source communities."""
 
 import shutil
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -418,6 +417,29 @@ def predict_carbon_sources(root):
     metadata["included_in_carbon_score"] = score_replicate
     metadata["carbon_score_exclusion_reason"] = growth_qc.replace("", np.nan)
 
+    selected_media = data.loc[score_replicate, "Media"]
+    by_media_obs = (
+        pd.DataFrame(observed[score_replicate], columns=SPECIES)
+        .assign(Media=selected_media.to_numpy())
+        .groupby("Media", sort=False)[list(SPECIES)]
+        .mean()
+    )
+    media_order = data["Media"].drop_duplicates().tolist()
+    qc_table = pd.DataFrame(
+        {
+            "Media": data["Media"],
+            "used": score_replicate,
+            "high_other_species": growth_qc.eq("high other species"),
+            "low_growth": growth_qc.eq("low growth"),
+        }
+    )
+    qc_counts = qc_table.groupby("Media", sort=False).agg(
+        n_replicates_total=("used", "size"),
+        n_replicates_used=("used", "sum"),
+        n_excluded_high_other_species=("high_other_species", "sum"),
+        n_excluded_low_growth=("low_growth", "sum"),
+    ).reindex(media_order)
+
     rows = []
     for cofactor_on in (True, False):
         branch = output / ("cofactor_on" if cofactor_on else "cofactor_off")
@@ -446,15 +468,8 @@ def predict_carbon_sources(root):
                 branch / filename, index=False
             )
 
-        selected_media = data.loc[score_replicate, "Media"]
         by_media_pred = (
             pd.DataFrame(predicted[score_replicate], columns=SPECIES)
-            .assign(Media=selected_media.to_numpy())
-            .groupby("Media", sort=False)[list(SPECIES)]
-            .mean()
-        )
-        by_media_obs = (
-            pd.DataFrame(observed[score_replicate], columns=SPECIES)
             .assign(Media=selected_media.to_numpy())
             .groupby("Media", sort=False)[list(SPECIES)]
             .mean()
@@ -462,21 +477,6 @@ def predict_carbon_sources(root):
         media_error = log2_error(
             by_media_pred, by_media_obs, PREDICTION_FLOOR
         )[list(NONGROWERS)]
-        media_order = data["Media"].drop_duplicates().tolist()
-        qc_table = pd.DataFrame(
-            {
-                "Media": data["Media"],
-                "used": score_replicate,
-                "high_other_species": growth_qc.eq("high other species"),
-                "low_growth": growth_qc.eq("low growth"),
-            }
-        )
-        qc_counts = qc_table.groupby("Media", sort=False).agg(
-            n_replicates_total=("used", "size"),
-            n_replicates_used=("used", "sum"),
-            n_excluded_high_other_species=("high_other_species", "sum"),
-            n_excluded_low_growth=("low_growth", "sum"),
-        ).reindex(media_order)
         media_metrics = qc_counts.copy()
         media_metrics["included_in_score"] = media_metrics["n_replicates_used"] > 0
         media_metrics["mean_abs_log2_error"] = media_error.abs().mean(axis=1)
