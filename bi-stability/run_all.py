@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""Run the two Bt/NG scans and save only inputs and tables needed by the figures.
-
-Use a new output directory for each simulation; plotting existing results does
-not run simulations. No per-cycle trajectory files or historical reports are saved.
+"""Run the two Bt/NG scans.
 """
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed

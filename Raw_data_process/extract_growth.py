@@ -1,4 +1,4 @@
-"""Extract growth yields; uses relative paths anchored to this script directory."""
+"""Extract growth yields"""
 from extraction_common import G, NG, growth_matrix, grower_dm
 
 if __name__ == "__main__":

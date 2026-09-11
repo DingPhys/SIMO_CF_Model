@@ -1,7 +1,6 @@
 """Bt resource fit, nongrower rates, monoculture AUC, and production profiles.
 
-Only continuous quantities are fitted here; the binary consumption matrices
-and all non-cofactor settings are fixed below.
+Consumption matrices and all non-cofactor settings are given as fixed.
 """
 
 from __future__ import annotations

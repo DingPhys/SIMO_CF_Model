@@ -1,7 +1,6 @@
 """DM68: fit 16 growers from the raw Excel workbook and save mean growth rates and lags.
 
 Run this script directly. Requires numpy, scipy, pandas, and openpyxl; no previous fit results are read.
-Fit replicates from both batches separately, then average with equal weight; include only final OD - initial OD >= 0.01.
 """
 from pathlib import Path
 import numpy as np

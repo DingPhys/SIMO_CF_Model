@@ -1,7 +1,4 @@
-"""Batched resource/production/stored-cofactor equations, equivalent to 0907 rhs.
-
-Adapted from the prior scan kernel to allow a different R matrix per scan row.
-No legacy model file is imported at runtime.
+"""Resource/production/stored-cofactor equations
 """
 import numpy as np
 

@@ -1,8 +1,6 @@
 """100% Bt spent medium: save the mean growth rate and lag for each nongrower.
 
-Run this script directly. Requires numpy, scipy, pandas, and openpyxl; no previous fit results are read.
-For species other than Im, average only replicates with final OD - initial OD >= 0.01.
-For Im, use only 20250910 B3: fit lag from the full curve and rate from the tail starting at 20% of the final net OD.
+Run this script directly. Requires numpy, scipy, pandas, and openpyxl
 """
 from pathlib import Path
 from datetime import time as ExcelTime

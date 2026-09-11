@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Scan Bt--nongrower initial-condition dependence in 90% DM + 10% Bt spent.
 
-The implementation reuses the frozen production/cofactor equations from
-the local batched dynamics kernel while adding cycle-level endpoint
-extinction and final endpoint summaries for the requested scan.
+This simulation uses the parameters inferred from the model
 """
 
 from __future__ import annotations

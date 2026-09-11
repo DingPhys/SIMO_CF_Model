@@ -1,4 +1,4 @@
-"""Shared lagged-logistic fit with fixed bounds and five deterministic search starts."""
+"""Fitting schemes of growth curves"""
 import numpy as np
 from scipy.optimize import differential_evolution, minimize
 

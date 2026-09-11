@@ -1,4 +1,4 @@
-"""Extract observation tables from raw workbooks, preserving the published layout."""
+"""Extract observation tables from raw workbooks"""
 from collections import defaultdict
 from datetime import time as ExcelTime
 from pathlib import Path

@@ -1,5 +1,4 @@
-"""Rebuild the nine observation tables directly in ../data/ from raw workbooks.
-
+"""Process raw data files to all data used for the model, processed data will be put in ../data/ folder
 Requires numpy, pandas, scipy and openpyxl. Paths are relative to this script.
 """
 from pathlib import Path
