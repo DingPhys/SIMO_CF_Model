@@ -7,18 +7,16 @@ suppressPackageStartupMessages({
 script_arg <- grep('^--file=', commandArgs(FALSE), value=TRUE)
 here <- dirname(normalizePath(sub('^--file=', '', script_arg)))
 args <- commandArgs(TRUE)
-output <- if(length(args)) normalizePath(args[[1]]) else file.path(here, 'output')
-stage <- if(length(args)>1) args[[2]] else 'final'
-lag_mode <- if(length(args)>2) args[[3]] else 'on'
-focal_species <- if(length(args)>3) args[[4]] else 'Col'
+output <- if(length(args)) normalizePath(args[[1]]) else file.path(here, 'simulation_results')
+lag_mode <- 'on'
+focal_species <- if(length(args)>1) args[[2]] else 'Col'
 stopifnot(focal_species %in% c('Col','Cs'))
-stopifnot(stage %in% c('final', 'baseline_20_cycles'), lag_mode %in% c('on','off'))
 figdir <- file.path(output, 'figures')
 dir.create(figdir, recursive=TRUE, showWarnings=FALSE)
 read <- function(path) read.csv(path, check.names=FALSE)
 is_true <- function(x) tolower(as.character(x)) %in% c('true','1')
-paths <- c(file.path(output,'pairwise',stage,'run_summary.csv'),
-           file.path(output,'community',stage,'run_summary.csv'),
+paths <- c(file.path(output,'run_summary_pairwise.csv'),
+           file.path(output,'run_summary_community.csv'),
            file.path(output,'growth_rate_axis_parameters.csv'))
 a <- read(paths[1])
  b <- read(paths[2])
@@ -52,7 +50,6 @@ points$initial_growth_rate <- points$bt_spent_intercept + points$dm_slope * poin
 points$growth_definition <- ifelse(points$species=='All NG',
   'sum of 10 species potential initial per-capita growth rates',
   'species potential initial per-capita growth rate')
-points$stage <- stage
 points <- points[order(points$x,points$ratio), ]
 stopifnot(!anyDuplicated(paste(points$x,points$ratio)))
 # Nearest scanned point defines each interval; outer edges stay within actual
@@ -79,10 +76,8 @@ zero_extension[,c('run_id','ratio','cycle_end_bt','converged_last_n','cycle',
 cells <- rbind(cells,zero_extension[zero_extension$ymax>0, ])
 bt_mu <- unique(coefficients$bt_initial_growth_h_inv)
 stopifnot(length(bt_mu)==1, is.finite(bt_mu))
-stem <- paste0(tolower(focal_species), '_mi_bt_extinction_threshold_bars_initial_growth_0_3_sum_10ng',
-               '_bt_dashed_line_arial_unified_6x3in_illustrator_safe',
-               if(lag_mode=='off') '_lag_off' else '',
-               if(stage!='final') paste0('_',stage) else '')
+stem <- paste0('nongrowers_Bt_extinction',
+               if(focal_species!='Col') paste0('_',focal_species) else '')
 width <- .54
 p <- ggplot(cells,aes(x=x,fill=outcome)) +
   geom_rect(aes(xmin=x-width/2,xmax=x+width/2,ymin=ymin,ymax=ymax),colour=NA) +

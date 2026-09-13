@@ -13,9 +13,7 @@ import pandas as pd
 from dynamics import _rk4_pairwise_production_batch
 from pairwise_scan import (
     COFACTOR_SPECIES,
-    EXTINCTION_MODES,
     INITIAL_CONDITIONS,
-    LAG_MODES,
     ScanConfig,
     apply_cycle_transfer,
     common_positive_rate,
@@ -30,25 +28,20 @@ def build_run_table(ratios: np.ndarray) -> pd.DataFrame:
     """Build the shared-ratio community conditions."""
     rows: list[dict[str, object]] = []
     for ratio_index, ratio in enumerate(ratios):
-        for lag_mode in LAG_MODES:
-            for initial_name, (total_ng0, bt0) in INITIAL_CONDITIONS.items():
-                for extinction_mode in EXTINCTION_MODES:
-                    rows.append(
-                        {
-                            "run_id": len(rows),
-                            "community": "Bt_plus_all_10_NG",
-                            "ratio_index": ratio_index,
-                            "ratio": float(ratio),
-                            "lag_mode": lag_mode,
-                            "initial_condition": initial_name,
-                            "initial_ng_per_species": float(total_ng0)
-                            / len(COFACTOR_SPECIES),
-                            "initial_total_ng": float(total_ng0),
-                            "initial_bt": float(bt0),
-                            "extinction_mode": extinction_mode,
-                            "hard_extinction": extinction_mode == "hard_extinction",
-                        }
-                    )
+        for initial_name, (total_ng0, bt0) in INITIAL_CONDITIONS.items():
+            rows.append({
+                "run_id": len(rows),
+                "community": "Bt_plus_all_10_NG",
+                "ratio_index": ratio_index,
+                "ratio": float(ratio),
+                "lag_mode": "on",
+                "initial_condition": initial_name,
+                "initial_ng_per_species": float(total_ng0) / len(COFACTOR_SPECIES),
+                "initial_total_ng": float(total_ng0),
+                "initial_bt": float(bt0),
+                "extinction_mode": "hard_extinction",
+                "hard_extinction": True,
+            })
     return pd.DataFrame(rows)
 
 
@@ -101,8 +94,7 @@ def assemble_batch_arrays(
     selected_lag = parameters.cofactor.loc[
         list(COFACTOR_SPECIES), "selected_lag_h"
     ].to_numpy(dtype=float)
-    lag_on = runs["lag_mode"].eq("on").to_numpy(dtype=bool)
-    lag[:, :BT_INDEX] = lag_on[:, None] * selected_lag[None, :]
+    lag[:, :BT_INDEX] = selected_lag[None, :]
     required[:, :BT_INDEX] = True
 
     aggregated_dm_y0 = float(
@@ -219,7 +211,7 @@ def simulate_batch(
     config: ScanConfig,
     starting_biomass: np.ndarray | None = None,
 ) -> pd.DataFrame:
-    """Simulate one ratio's eight lag/initial/extinction conditions."""
+    """Simulate one ratio's two initial conditions with lag and endpoint deletion."""
     config.validate()
     arrays = assemble_batch_arrays(parameters, runs, config)
     rate_cr = arrays["rate_cr"]
@@ -230,7 +222,6 @@ def simulate_batch(
     required = arrays["required"]
     initial_resources = arrays["initial_resources"]
     biomass = arrays["initial_biomass"].copy() if starting_biomass is None else starting_biomass.copy()
-    hard_extinction = runs["hard_extinction"].to_numpy(dtype=bool)
 
     n_runs = len(runs)
     residual_history = deque(maxlen=config.convergence_consecutive_cycles)
@@ -293,7 +284,6 @@ def simulate_batch(
         endpoint = biomass.copy()
         next_start = apply_cycle_transfer(
             endpoint,
-            hard_extinction,
             config.endpoint_extinction_threshold,
             config.dilution,
         )

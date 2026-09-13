@@ -1,5 +1,11 @@
 {
-  "parameter_source": "/Users/ding/Desktop/Research_Projects/Ecological_Models/Modeling_with_AI/Final_Code_0911/parameters",
+  "parameter_source": "../../parameters",
+  "extinction_modes": [
+    "hard_extinction"
+  ],
+  "lag_modes": [
+    "on"
+  ],
   "config": {
     "hours_per_cycle": 48.0,
     "max_cycles": 20,

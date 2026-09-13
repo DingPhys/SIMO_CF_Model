@@ -38,8 +38,6 @@ INITIAL_CONDITIONS = {
     "ng_low_bt_high": (1e-3, 1.0),
     "ng_high_bt_low": (1.0, 1e-3),
 }
-LAG_MODES = ("off", "on")
-EXTINCTION_MODES = ("hard_extinction", "no_extinction_control")
 
 
 @dataclass(frozen=True)
@@ -200,26 +198,21 @@ def build_run_table(
         base_rate = common_positive_rate(parameters.nongrower_rate_cr.loc[name])
         selected_lag = float(parameters.cofactor.loc[name, "selected_lag_h"])
         for ratio in ratios:
-            for lag_mode in LAG_MODES:
-                lag_h = 0.0 if lag_mode == "off" else selected_lag
-                for initial_name, (ng0, bt0) in INITIAL_CONDITIONS.items():
-                    for extinction_mode in EXTINCTION_MODES:
-                        rows.append(
-                            {
-                                "run_id": len(rows),
-                                "species": name,
-                                "ratio": float(ratio),
-                                "r_ng_bt_production": base_rate,
-                                "r_ng_dm": float(ratio) * base_rate,
-                                "lag_mode": lag_mode,
-                                "lag_h": lag_h,
-                                "initial_condition": initial_name,
-                                "initial_ng": ng0,
-                                "initial_bt": bt0,
-                                "extinction_mode": extinction_mode,
-                                "hard_extinction": extinction_mode == "hard_extinction",
-                            }
-                        )
+            for initial_name, (ng0, bt0) in INITIAL_CONDITIONS.items():
+                rows.append({
+                    "run_id": len(rows),
+                    "species": name,
+                    "ratio": float(ratio),
+                    "r_ng_bt_production": base_rate,
+                    "r_ng_dm": float(ratio) * base_rate,
+                    "lag_mode": "on",
+                    "lag_h": selected_lag,
+                    "initial_condition": initial_name,
+                    "initial_ng": ng0,
+                    "initial_bt": bt0,
+                    "extinction_mode": "hard_extinction",
+                    "hard_extinction": True,
+                })
     return pd.DataFrame(rows)
 
 
@@ -260,7 +253,9 @@ def assemble_batch_arrays(
     production[:, 1, 1:] = parameters.bt_production.to_numpy(dtype=float)[None, :]
     D[:, 0] = D_vector[indices]
     F[:, 0] = F_vector[indices]
-    lag[:, 0] = runs["lag_h"].to_numpy(dtype=float)
+    lag[:, 0] = parameters.cofactor.loc[
+        runs["species"].tolist(), "selected_lag_h"
+    ].to_numpy(dtype=float)
     required[:, 0] = True
 
     initial_resources = np.concatenate(
@@ -285,14 +280,12 @@ def assemble_batch_arrays(
 
 def apply_cycle_transfer(
     endpoint: np.ndarray,
-    hard_extinction: np.ndarray,
     threshold: float,
     dilution: float,
 ) -> np.ndarray:
     endpoint = np.asarray(endpoint, dtype=float)
-    hard_extinction = np.asarray(hard_extinction, dtype=bool)
     next_start = endpoint / dilution
-    discard = hard_extinction[:, None] & (endpoint < threshold)
+    discard = endpoint < threshold
     next_start[discard] = 0.0
     return next_start
 
@@ -371,7 +364,6 @@ def simulate_scan_batch(
     required = arrays["required"]
     initial_resources = arrays["initial_resources"]
     biomass = arrays["initial_biomass"].copy()
-    hard_extinction = runs["hard_extinction"].to_numpy(dtype=bool)
     n_runs, n_species, n_resources = rate_cr.shape
     if biomass.shape != (n_runs, n_species):
         raise ValueError("Initial biomass does not match the assembled scan batch.")
@@ -437,7 +429,6 @@ def simulate_scan_batch(
         endpoint = biomass.copy()
         next_start = apply_cycle_transfer(
             endpoint,
-            hard_extinction,
             config.endpoint_extinction_threshold,
             config.dilution,
         )
@@ -486,54 +477,3 @@ def simulate_scan_batch(
         default="washout",
     )
     return final
-
-
-def compare_initial_conditions(final: pd.DataFrame, config: ScanConfig) -> pd.DataFrame:
-    keys = ["species", "ratio", "lag_mode", "extinction_mode"]
-    columns = [
-        "cycle_end_ng",
-        "cycle_end_bt",
-        "final_survival_class",
-        "converged_last_n",
-        "cycle_map_residual_log10",
-    ]
-    wide = final.pivot(index=keys, columns="initial_condition", values=columns)
-    wide.columns = [f"{value}__{initial}" for value, initial in wide.columns]
-    wide = wide.reset_index()
-    low = "ng_low_bt_high"
-    high = "ng_high_bt_low"
-    floor = config.convergence_log_floor
-    for taxon in ("ng", "bt"):
-        a = wide[f"cycle_end_{taxon}__{low}"].to_numpy(dtype=float)
-        b = wide[f"cycle_end_{taxon}__{high}"].to_numpy(dtype=float)
-        wide[f"endpoint_log10_difference_{taxon}"] = np.abs(
-            np.log10(a + floor) - np.log10(b + floor)
-        )
-    wide["max_endpoint_log10_difference"] = wide[
-        ["endpoint_log10_difference_ng", "endpoint_log10_difference_bt"]
-    ].max(axis=1)
-    low_total = (
-        wide[f"cycle_end_ng__{low}"] + wide[f"cycle_end_bt__{low}"]
-    )
-    high_total = (
-        wide[f"cycle_end_ng__{high}"] + wide[f"cycle_end_bt__{high}"]
-    )
-    low_ng_rel = np.divide(
-        wide[f"cycle_end_ng__{low}"].to_numpy(dtype=float), low_total.to_numpy(dtype=float),
-        out=np.zeros(len(wide)), where=low_total.to_numpy(dtype=float) > 0
-    )
-    high_ng_rel = np.divide(
-        wide[f"cycle_end_ng__{high}"].to_numpy(dtype=float), high_total.to_numpy(dtype=float),
-        out=np.zeros(len(wide)), where=high_total.to_numpy(dtype=float) > 0
-    )
-    wide["relative_composition_l1"] = 2.0 * np.abs(low_ng_rel - high_ng_rel)
-    wide["survival_class_differs"] = (
-        wide[f"final_survival_class__{low}"]
-        != wide[f"final_survival_class__{high}"]
-    )
-    wide["both_initial_conditions_converged"] = (
-        wide[f"converged_last_n__{low}"].astype(bool)
-        & wide[f"converged_last_n__{high}"].astype(bool)
-    )
-    return wide
-

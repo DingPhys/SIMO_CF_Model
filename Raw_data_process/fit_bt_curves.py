@@ -83,7 +83,7 @@ def main():
         rows.append({"focal_species": species,
             "growth_rate": np.mean(rates) if rates else np.nan,
             "lag_time_h": np.mean(lags) if lags else np.nan})
-        print(f"{species}: {len(rates)} 条曲线", flush=True)
+        print(f"{species}: {len(rates)} curves", flush=True)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(OUTPUT, index=False, float_format="%.8f", na_rep="")
     print(OUTPUT)

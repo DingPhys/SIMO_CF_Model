@@ -23,7 +23,7 @@ save_figure <- function(stem, draw, width, height,
   invisible(dev.off())
 }
 
-# ---- double-spent monoculture fit ----
+# ----Figure4B double-spent monoculture fit ----
 local({
 
   floor_value <- 1e-3
@@ -236,7 +236,7 @@ local({
 
 })
 
-# ---- Ld panel ----
+# ----Figure4E Ld panel ----
 local({
   # Observed-versus-predicted Ld quantities under resource-only and
   # resource-plus-cofactor competition. Point fill encodes model formulation;
@@ -606,7 +606,7 @@ local({
 
 })
 
-# ---- prediction errors ----
+# ----Figure4D prediction errors ----
 local({
 
   read_table <- function(path) {
@@ -928,7 +928,7 @@ local({
 
 })
 
-# ---- relative-abundance grid ----
+# ----Figure4C relative-abundance grid ----
 local({
   # The geometry follows the existing manuscript figure. Nongrowers use the
   # supplied R palette, while growers are shown in neutral grey.
