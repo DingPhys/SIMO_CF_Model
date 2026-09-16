@@ -9,7 +9,7 @@ import pandas as pd
 from scipy.ndimage import median_filter
 from scipy.special import expit
 
-from growth_fit_common import fit_full_curve, minimize_loss, log2_error, X0_MIN, X0_MAX
+from growth_fit_common import fit_full_curve, minimize_grid, log2_error, X0_MIN, X0_MAX
 
 ROOT = Path(__file__).resolve().parent
 INPUT = ROOT / "Growth_data/Non_growers_spent_medium_of_growers.xlsx"
@@ -41,18 +41,17 @@ def fit_im_tail_rate(time, od):
     low_b = np.log(k / X0_MAX - 1)
     high_b = np.log(k / X0_MIN - 1)
 
-    def unpack(parameters):
-        rate = np.exp(parameters[0])
-        # b = log(K/X0 - 1) + rate*lag; bounds allow a valid X0 and a lag no later than the tail start.
-        b = low_b + parameters[1] * (high_b + rate * time[start] - low_b)
-        return rate, b
-
     def loss(parameters):
-        rate, b = unpack(parameters)
-        return log2_error(k * expit(rate * tail_time - b), tail_od)
+        rate = np.exp(parameters[:, 0, None])
+        fraction = parameters[:, 1, None]
+        # b = log(K/X0 - 1) + rate*lag, with lag no later than the tail start.
+        b = low_b + fraction * (high_b + rate * time[start] - low_b)
+        predicted = k * expit(rate * tail_time[None, :] - b)
+        return log2_error(predicted, tail_od)
 
-    parameters = minimize_loss(loss, [(np.log(1e-5), np.log(50)), (0, 1)])
-    return float(unpack(parameters)[0])
+    bounds = [(np.log(1e-5), np.log(50)), (0, 1)]
+    parameters = minimize_grid(loss, bounds, [1201, 1201])
+    return float(np.exp(parameters[0]))
 
 
 def main():

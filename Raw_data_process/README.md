@@ -14,3 +14,5 @@ fit_dm_curves.py do the same thing for growers in DM, saved as 16_grower_dm68_cu
 The functions are in growth_fit_common.py and extractions_common.py
 
 
+
+Growth curves use a coarse grid followed by an 81-point fine grid and up to 40 local grid refinements. X0 and rate use logarithmic coordinates; lag uses linear coordinates. Full curves use a 21 x 241 x 193 coarse grid; the Im tail uses a 1201 x 1201 grid. The search is independent of continuous optimizers, with no special Ls retry. Im keeps its existing 20% tail-start rule for rate and full-curve lag.
