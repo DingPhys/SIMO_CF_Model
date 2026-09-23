@@ -1,4 +1,4 @@
-# A consumer resource model with cofactor competition included
+# Consumer-resource model with cofactor competetion implemented
 
 This folder contains data and code for reproducing the model fitting and prediction results related to the paper 'Cross-feeding among gut bacteria involves a single-input multi-output structure and cofactor competition'.
 
@@ -14,7 +14,7 @@ python -m pip install numpy pandas scipy openpyxl
 ## Extract data from raw data
 
 ```bash
-python -B Raw_data_process/run_all.py
+python -B Raw_data/run_all.py
 ```
 
 
@@ -58,14 +58,6 @@ scripts/run_predictions.py     prediction entry point
 scripts/reproduce_all.py       fit followed by prediction
 ```
 
-## Outputs
+## Figure make
+to make figures, first run prepare_figure_s2_data.py and prepare_figure4_data.py, then run FigureS2.R and Figure4.R in figure_plots/scripts
 
-Fitted parameters are saved under `parameters/`.  The simplified predictions
-are saved under:
-
-```text
-prediction_results/summary.csv               summary of errors
-prediction_results/nongrowers_in_bt_spent/   prediction results of nongrowers in Bt spent
-prediction_results/dm_communities/           prediction results of assemblies in DM
-prediction_results/carbon_sources/           prediction results of different carbon sources
-```

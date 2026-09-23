@@ -67,19 +67,27 @@ def log2_error(predicted, observed):
     return np.mean(np.log2(ratio) ** 2, axis=-1)
 
 
-def fit_full_curve(time, od):
+def fit_full_curve(time, od, return_x0=False, fit_start=0.0):
     net = od - od.min()
     k = net[-1]  # Fixed asymptotic plateau, not a forced endpoint.
+    # A restricted window changes only the loss, not the background or time origin.
+    use = time >= fit_start
+    if np.count_nonzero(use) < 2:
+        raise ValueError('Fitting window must contain at least two points.')
+    fit_time, fit_od = time[use], net[use]
 
     def loss(parameters):
         # Each row is one candidate: log(X0), log(rate), lag.
         x0 = np.exp(parameters[:, 0, None])
         rate = np.exp(parameters[:, 1, None])
         lag = parameters[:, 2, None]
-        shifted_time = np.maximum(time[None, :] - lag, 0)
+        shifted_time = np.maximum(fit_time[None, :] - lag, 0)
         predicted = k / (1 + (k / x0 - 1) * np.exp(-rate * shifted_time))
-        return log2_error(predicted, net)
+        return log2_error(predicted, fit_od)
 
     bounds = [(np.log(X0_MIN), np.log(X0_MAX)), (np.log(1e-5), np.log(50)), (0, time[-1])]
     parameters = minimize_grid(loss, bounds, [21, 241, 193])
-    return float(np.exp(parameters[1])), float(parameters[2])
+    result = (float(np.exp(parameters[1])), float(parameters[2]))
+    if return_x0:
+        return (*result, float(np.exp(parameters[0])))
+    return result

@@ -155,6 +155,25 @@ local({
   )
   comparison$cofactor_plot <- pmax(comparison$cofactor_prediction, floor_value)
 
+  # Log-scale agreement summary (Pearson and Spearman on floor-clipped
+  # log10 values), printed so each data refresh reports the correlation.
+  log_observed <- log10(comparison$observed_plot)
+  for (variant in c("resource_only_plot", "cofactor_plot")) {
+    log_predicted <- log10(comparison[[variant]])
+    cat(
+      sprintf(
+        paste0(
+          "double_spent_monoculture %s: Pearson r(log10) = %.4f,",
+          " Spearman = %.4f (n = %d)\n"
+        ),
+        sub("_plot$", "", variant),
+        cor(log_observed, log_predicted),
+        cor(log_observed, log_predicted, method = "spearman"),
+        length(log_observed)
+      )
+    )
+  }
+
   log_tick_labels <- c(
     expression(10^"-3"),
     expression(10^"-2"),

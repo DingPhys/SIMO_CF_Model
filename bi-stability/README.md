@@ -22,6 +22,8 @@ Unconverged trajectories continue in 20-cycle blocks up to the requested limit. 
 - `run_summary_community.csv`: Bt plus all ten nongrowers.
 - `ratio_grid.csv`, `growth_rate_axis_parameters.csv`, and `input_manifest.json`: scan settings and plotting inputs. The parameter source is relative to the manifest directory.
 - `figures/`: `bt_outcomes_lag_on` and `nongrowers_Bt_extinction`, each as SVG/PDF.
+  The `_all_ng` variants show the same two encodings for all ten scanned
+  nongrowers (exploratory; the main figures keep the Col/Mi panels).
 
 
 ## Replot saved results

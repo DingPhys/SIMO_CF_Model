@@ -89,10 +89,11 @@ local({
     dm_resource_table$resource_id
   )
 
-  # Keep only resources whose total abundance exceeds 1.5e-3. Abundance
+  # Keep only resources whose total abundance is at least 1.5e-3. Abundance
   # comes from the DM table for DM resources and from the Bt table for the
-  # Bt-only Resource_* columns. This drops the zero-abundance U_Bfi / U_Bf
-  # and the five ~1e-3 U_* resources, leaving 12 DM resources.
+  # Bt-only Resource_* columns. This drops the near-zero U_Bfi / U_Bf, the
+  # five ~1e-3 U_* resources, and the zero-abundance Resource_11-14,
+  # leaving 12 DM resources and 13 Bt-produced resources.
   bt_resource_table <- read.csv(
     file.path(figure_dir, "bt_resource_Y0.csv"),
     check.names = FALSE,
@@ -112,7 +113,7 @@ local({
   if (anyNA(column_abundance)) {
     stop("A matrix column has no abundance in either resource table.", call. = FALSE)
   }
-  keep_columns <- column_abundance > abundance_floor
+  keep_columns <- column_abundance >= abundance_floor
   dropped_resources <- all_columns[!keep_columns]
   consumption_matrix <- consumption_matrix[, keep_columns, drop = FALSE]
   production_matrix <- production_matrix[, keep_columns, drop = FALSE]
@@ -418,7 +419,11 @@ local({
   # Plot the finalized nongrower assemblies in Bt-spent medium as an assembly
   # membership matrix with the mean absolute log2 prediction error above each
   # column and a matching error histogram at right. The script reads only the
-  # accompanying long-form source-data CSV.
+  # accompanying wide-form source-data CSV: the header row holds the assembly
+  # names, the next 16 rows hold one row per species (a non-empty cell means
+  # the species is presented in that assembly; the cell value itself is the
+  # predicted relative abundance and is not used here), and a final
+  # "mean_abs_log2_error" row holds the per-assembly prediction error.
 
   data_path <- file.path(
     figure_dir,
@@ -429,72 +434,76 @@ local({
     "nongrower_bt_spent_assembly_prediction_matrix"
   )
 
-  source_data <- read.csv(
+  raw_lines <- read.csv(
     data_path,
     check.names = FALSE,
-    stringsAsFactors = FALSE
+    stringsAsFactors = FALSE,
+    colClasses = "character"
   )
 
-  required_columns <- c(
-    "assembly_order",
-    "assembly",
-    "assembly_type",
-    "assembly_mean_abs_log2_error",
-    "species_order",
-    "species",
-    "presented"
+  # Drop the fully empty padding rows below the error row.
+  non_empty_rows <- apply(
+    raw_lines,
+    1L,
+    function(row) any(!is.na(row) & nzchar(trimws(row)))
   )
-  missing_columns <- setdiff(required_columns, names(source_data))
-  if (length(missing_columns) > 0L) {
-    stop("Missing source-data columns: ", paste(missing_columns, collapse = ", "))
+  raw_lines <- raw_lines[non_empty_rows, , drop = FALSE]
+
+  if (names(raw_lines)[1] != "species") {
+    stop("The first column must be 'species'.", call. = FALSE)
+  }
+  error_row_index <- which(raw_lines[[1]] == "mean_abs_log2_error")
+  if (length(error_row_index) != 1L) {
+    stop("Expected exactly one 'mean_abs_log2_error' row.", call. = FALSE)
   }
 
-  assembly_table <- unique(source_data[, c(
-    "assembly_order",
-    "assembly",
-    "assembly_type",
-    "assembly_mean_abs_log2_error"
-  )])
-  assembly_table <- assembly_table[order(assembly_table$assembly_order), , drop = FALSE]
+  species_names <- raw_lines[[1]][seq_len(error_row_index - 1L)]
+  n_species <- length(species_names)
+  if (n_species != 16L) {
+    stop("Expected 16 species rows above the error row.", call. = FALSE)
+  }
 
-  species_table <- unique(source_data[, c("species_order", "species")])
-  species_table <- species_table[order(species_table$species_order), , drop = FALSE]
-
-  n_assemblies <- nrow(assembly_table)
-  n_species <- nrow(species_table)
-  expected_rows <- n_assemblies * n_species
-  if (nrow(source_data) != expected_rows) {
-    stop("The source data are not a complete assembly-by-species grid.")
-  }
-  if (!identical(assembly_table$assembly_order, seq_len(n_assemblies))) {
-    stop("Assembly order must be consecutive and start at 1.")
-  }
-  if (!identical(species_table$species_order, seq_len(n_species))) {
-    stop("Species order must be consecutive and start at 1.")
-  }
+  assembly_names <- names(raw_lines)[-1]
+  n_assemblies <- length(assembly_names)
 
   membership <- matrix(
     0L,
     nrow = n_species,
     ncol = n_assemblies,
-    dimnames = list(species_table$species, assembly_table$assembly)
+    dimnames = list(species_names, assembly_names)
   )
-  for (row_index in seq_len(nrow(source_data))) {
-    membership[
-      source_data$species_order[[row_index]],
-      source_data$assembly_order[[row_index]]
-    ] <- source_data$presented[[row_index]]
+  species_cells <- as.matrix(raw_lines[seq_len(error_row_index - 1L), -1, drop = FALSE])
+  membership[!is.na(species_cells) & nzchar(trimws(species_cells))] <- 1L
+
+  errors <- as.numeric(as.character(raw_lines[error_row_index, -1]))
+  if (anyNA(errors)) {
+    stop("The error row contains a non-numeric value.", call. = FALSE)
   }
 
+  # The wide file carries no assembly_type column; recover it from the
+  # membership counts (2 = pairwise, 3-5 = higher_order, 15 = dropout,
+  # 16 = full_community). Only the group boundaries are used downstream.
   membership_counts <- colSums(membership)
-  expected_membership_counts <- unique(source_data[, c("assembly_order", "n_presented")])
-  expected_membership_counts <- expected_membership_counts[
-    order(expected_membership_counts$assembly_order),
-    "n_presented"
-  ]
-  if (!identical(as.numeric(membership_counts), as.numeric(expected_membership_counts))) {
-    stop("Assembly membership counts do not match n_presented.")
-  }
+  assembly_types <- ifelse(
+    membership_counts == 2L,
+    "pairwise",
+    ifelse(
+      membership_counts == 16L,
+      "full_community",
+      ifelse(membership_counts == 15L, "dropout", "higher_order")
+    )
+  )
+
+  assembly_table <- data.frame(
+    assembly = assembly_names,
+    assembly_type = assembly_types,
+    assembly_mean_abs_log2_error = errors,
+    stringsAsFactors = FALSE
+  )
+  species_table <- data.frame(
+    species = species_names,
+    stringsAsFactors = FALSE
+  )
 
   # Match the established deep blue used by the other finalized R figures.
   deep_blue <- "#08519C"

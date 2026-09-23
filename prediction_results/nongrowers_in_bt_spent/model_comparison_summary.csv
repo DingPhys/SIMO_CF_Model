@@ -1,5 +1,5 @@
 cofactor_enabled,community_subset,n_communities,mean_community_abs_log2_error
-True,all assemblies,129,1.2320201894551732
-True,complex assemblies,29,1.294201392588907
-False,all assemblies,129,1.3578173290524445
-False,complex assemblies,29,1.854862000296401
+True,all assemblies,129,1.1711063732434455
+True,complex assemblies,29,1.1463920664946372
+False,all assemblies,129,1.3545210918904
+False,complex assemblies,29,1.8933224135534923

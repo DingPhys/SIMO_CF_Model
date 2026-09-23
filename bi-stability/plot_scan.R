@@ -28,6 +28,8 @@ save_plot <- function(p,stem,w,h){
 }
 a <- read(file.path(output,'run_summary_pairwise.csv'))
 a <- a[a$species %in% c('Col','Mi'),]
+all_ng <- read(file.path(output,'run_summary_pairwise.csv'))
+ng_levels <- c('Col','Cs','Et','Eu.c','Eu.l','Im','Ld','Lsp','Mi','Va')
 b <- read(file.path(output,'run_summary_community.csv'))
 b$species <- 'All NG'
 cols <- c('species','ratio','lag_mode','initial_condition','extinction_mode','cycle_end_bt','converged_last_n','cycle')
@@ -50,5 +52,24 @@ for(lagmode in 'on'){
  subtitle=paste0('Lag ',lagmode,'; x marks unconverged trajectories. Initial NG:Bt uses total NG biomass.'))+
  base_theme+theme(legend.position='bottom',axis.line.y=element_blank(),axis.ticks.y=element_blank())
  save_plot(p,paste0('bt_outcomes_lag_',lagmode),8,2.2)
+}
+# Same scan summary for every scanned nongrower plus the full community.
+all_bar <- rbind(all_ng[,cols],b[,cols])
+all_bar <- all_bar[all_bar$extinction_mode=='hard_extinction',]
+all_bar$scan_index<-match(round(all_bar$ratio,12),round(ratio$ratio,12))-1
+all_bar$converged_last_n<-tolower(as.character(all_bar$converged_last_n)) %in% c('true','1')
+all_bar$outcome<-ifelse(all_bar$cycle_end_bt<1e-4,'Bt below threshold','Bt survives')
+all_bar$initial<-ifelse(all_bar$initial_condition=='ng_low_bt_high','NG:Bt = 1:1000','NG:Bt = 1000:1')
+all_bar$species<-factor(all_bar$species,levels=c(ng_levels,'All NG'))
+for(lagmode in 'on'){
+ d<-all_bar[all_bar$lag_mode==lagmode,]
+ p<-ggplot(d,aes(scan_index,initial,fill=outcome))+geom_tile(height=.7)+
+ geom_point(data=d[!d$converged_last_n,],shape=4,size=.65,stroke=.2,show.legend=FALSE)+
+ facet_grid(.~species)+scale_fill_manual(values=c('Bt below threshold'='#E77C73','Bt survives'='#6BAED6'),drop=FALSE)+
+ scale_x_continuous(breaks=breaks,labels=labels,expand=expansion(mult=c(.015,.04)))+
+ labs(x='Scanned consumption-rate ratio: NG on DM / NG on Bt products',y=NULL,fill=NULL,
+ subtitle=paste0('Lag ',lagmode,'; x marks unconverged trajectories. Initial NG:Bt uses total NG biomass.'))+
+ base_theme+theme(legend.position='bottom',axis.line.y=element_blank(),axis.ticks.y=element_blank())
+ save_plot(p,paste0('bt_outcomes_lag_',lagmode,'_all_ng'),14,2.2)
 }
 cat('Saved SVG/PDF in',figdir,'\n')

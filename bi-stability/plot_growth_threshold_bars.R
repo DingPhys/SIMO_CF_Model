@@ -116,3 +116,75 @@ cairo_pdf(file.path(figdir,paste0(stem,'.pdf')),width=6,height=3,family='Arial')
 print(p)
  dev.off()
 cat('Saved:',file.path(figdir,stem),'\n')
+
+# ---------------------------------------------------------------------------
+# Exploratory all-species version: same initial-growth-rate encoding for every
+# scanned nongrower plus the full community, one facet per species.
+ng_levels <- c('Col','Cs','Et','Eu.c','Eu.l','Im','Ld','Lsp','Mi','Va')
+a_all <- read(paths[1])
+a_all <- a_all[,cols]
+ap <- rbind(a_all,b[,cols])
+ap <- ap[ap$lag_mode==lag_mode & ap$extinction_mode=='hard_extinction', ]
+ap$converged_last_n <- is_true(ap$converged_last_n)
+ap$outcome <- factor(ifelse(ap$cycle_end_bt < 1e-4,'Bt extinction','Bt survives'),
+                     levels=c('Bt survives','Bt extinction'))
+spec_all <- data.frame(
+  species=c(ng_levels,'All NG'),
+  dm_slope=c(coefficients$dm_growth_slope[match(ng_levels,coefficients$species)],
+             sum(coefficients$dm_growth_slope)),
+  bt_spent_intercept=c(coefficients$bt_spent_growth_intercept[match(ng_levels,coefficients$species)],
+                       sum(coefficients$bt_spent_growth_intercept)))
+stopifnot(!anyNA(spec_all))
+ap <- merge(ap,spec_all,by='species',sort=FALSE)
+ap$initial_growth_rate <- ap$bt_spent_intercept + ap$dm_slope*ap$ratio
+ap$cell_id <- paste(ap$species,ap$initial_condition)
+stopifnot(!anyDuplicated(paste(ap$cell_id,ap$ratio)))
+cells_all <- do.call(rbind,lapply(split(ap,ap$cell_id),function(g){
+  g <- g[order(g$initial_growth_rate), ]
+   y <- g$initial_growth_rate
+  mid <- (y[-length(y)]+y[-1])/2
+  g$ymin <- pmax(0,c(y[1],mid))
+   g$ymax <- pmin(3,c(mid,tail(y,1)))
+  g[g$ymax>g$ymin, ]
+}))
+rownames(cells_all) <- NULL
+zero_all <- ap[!duplicated(ap$cell_id), ]
+zero_all$ymin <- 0
+zero_all$ymax <- pmin(3,zero_all$initial_growth_rate)
+zero_all$outcome <- factor('Bt survives',levels=levels(ap$outcome))
+cells_all <- rbind(cells_all,zero_all[zero_all$ymax>0, ])
+species_levels <- c(ng_levels,'All NG')
+cells_all$species <- factor(cells_all$species,levels=species_levels)
+ap$species <- factor(ap$species,levels=species_levels)
+init_label <- c(ng_low_bt_high='1:1000',ng_high_bt_low='1000:1')
+cells_all$x <- match(cells_all$initial_condition,names(init_label))
+unc_all <- ap[!ap$converged_last_n & ap$initial_growth_rate<=3, ]
+unc_all$x <- match(unc_all$initial_condition,names(init_label))
+w_all <- .8
+p_all <- ggplot(cells_all,aes(fill=outcome)) +
+  geom_rect(aes(xmin=x-w_all/2,xmax=x+w_all/2,ymin=ymin,ymax=ymax),colour=NA) +
+  geom_hline(yintercept=bt_mu,linetype='dashed',linewidth=.45,colour='#111111') +
+  geom_point(data=unc_all,aes(x=x,y=initial_growth_rate),inherit.aes=FALSE,
+             shape=4,size=1.2,stroke=.3) +
+  facet_wrap(~species,nrow=2) +
+  scale_fill_manual(values=c('Bt survives'='#6BAED6','Bt extinction'='#E77C73'),drop=FALSE) +
+  scale_x_continuous(breaks=1:2,labels=init_label) +
+  scale_y_continuous(breaks=0:3,expand=expansion(mult=0)) +
+  coord_cartesian(ylim=c(0,3)) +
+  labs(x='Initial NG:Bt ratio',y=expression(paste('Initial growth rate, ',plain('μ')^plain('0'),
+       ' (',plain('h')^plain('-1'),')')),fill=NULL) +
+  theme_classic(base_family='Arial',base_size=8) +
+  theme(text=element_text(family='Arial',size=8,colour='#111111'),
+        axis.title=element_text(size=9),axis.text=element_text(size=7,colour='#111111'),
+        axis.ticks=element_line(linewidth=.3,colour='#111111'),
+        axis.line=element_line(linewidth=.4,colour='#111111'),
+        strip.background=element_rect(fill='white',colour=NA),strip.text=element_text(size=8),
+        legend.position='top',legend.text=element_text(size=8))
+svglite::svglite(file.path(figdir,'nongrowers_Bt_extinction_all_ng.svg'),width=11,height=4.5,
+                 system_fonts=list(sans='Arial'))
+print(p_all)
+ dev.off()
+cairo_pdf(file.path(figdir,'nongrowers_Bt_extinction_all_ng.pdf'),width=11,height=4.5,family='Arial')
+print(p_all)
+ dev.off()
+cat('Saved:',file.path(figdir,'nongrowers_Bt_extinction_all_ng'),'\n')
